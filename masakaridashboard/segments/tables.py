@@ -14,6 +14,9 @@
 #    under the License.
 
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ungettext_lazy
+
+from masakaridashboard.api import api
 
 from horizon import tables
 
@@ -37,6 +40,27 @@ class SegmentFilterAction(tables.FilterAction):
     filter_choices = SEGMENT_FILTER_CHOICES
 
 
+class DeleteSegment(tables.DeleteAction):
+    @staticmethod
+    def action_present(count):
+        return ungettext_lazy(
+            u"Delete Segment",
+            u"Delete Segments",
+            count
+        )
+
+    @staticmethod
+    def action_past(count):
+        return ungettext_lazy(
+            u"Deleted Segment",
+            u"Deleted Segments",
+            count
+        )
+
+    def delete(self, request, segment_uuid):
+        api.segment_delete(request, segment_uuid, ignore_missing=True)
+
+
 class FailoverSegmentTable(tables.DataTable):
 
     name = tables.WrappingColumn('name', verbose_name=_("Name"), truncate=40)
@@ -55,4 +79,4 @@ class FailoverSegmentTable(tables.DataTable):
     class Meta(object):
         name = "failover_segment"
         verbose_name = _("FailoverSegment")
-        table_actions = (CreateSegment, SegmentFilterAction)
+        table_actions = (DeleteSegment, CreateSegment, SegmentFilterAction)

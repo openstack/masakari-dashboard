@@ -149,3 +149,25 @@ class SegmentTest(test.TestCase):
             url=url, has_more=True, has_prev=False)
         segments = res.context['failover_segment_table'].data
         self.assertItemsEqual(segments, expected_segments)
+
+    def test_delete_ok(self):
+
+        segment = self.masakari_segment.list()[0]
+        data = {'object_ids': [segment.uuid],
+                'action': 'failover_segment__delete'}
+        with mock.patch(
+                'masakaridashboard.api.api.get_segment_list',
+                return_value=(self.masakari_segment.list(), True, True)
+        ), mock.patch(
+                'masakaridashboard.api.api.segment_delete',
+                return_value=None
+        ) as mocked_delete:
+            res = self.client.post(INDEX_URL, data)
+
+        self.assertNoFormErrors(res)
+        self.assertRedirectsNoFollow(res, INDEX_URL)
+        mocked_delete.assert_called_once_with(
+            mock.ANY,
+            segment.uuid,
+            ignore_missing=True
+        )

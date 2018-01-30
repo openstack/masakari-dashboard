@@ -110,3 +110,9 @@ def segment_create(request, data):
 def get_segment(request, segment_id):
     """Returns segment by id"""
     return openstack_connection(request).get_segment(segment_id)
+
+
+@handle_errors(_("Unable to delete segment"), [])
+def segment_delete(request, segment_id, ignore_missing=True):
+    return openstack_connection(request).delete_segment(
+        segment_id, ignore_missing)
