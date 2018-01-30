@@ -25,4 +25,5 @@ urlpatterns = [
         name='create_segment'),
     url(SEGMENT % 'detail', views.DetailView.as_view(), name='detail'),
     url(SEGMENT % 'update', views.UpdateView.as_view(), name='update'),
+    url(SEGMENT % 'addhost', views.AddHostView.as_view(), name='addhost'),
 ]

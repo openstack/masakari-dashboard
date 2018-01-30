@@ -1,0 +1,8 @@
+{% extends "horizon/common/_modal_form.html" %}
+{% load i18n %}
+{% block modal-body-right %}
+<h3>{% trans "Description:" %}</h3>
+<p>{% trans "Create a Host under a given segment with name, type and control_attributes."%}</p>
+<p>{% trans "Reserved : User can set specific host as reserved by checking on reserved parameter. On this particular host, compute service must be disabled. Default value is set to False." %}</p>
+<p>{% trans "On Maintenance: Boolean parameter indicating whether this host is under maintenance or not. Default value is set to False." %}</p>
+{% endblock %}

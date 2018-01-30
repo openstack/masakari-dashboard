@@ -170,3 +170,60 @@ class UpdateView(forms.ModalFormView):
                 'name': segment.name,
                 'recovery_method': segment.recovery_method,
                 'description': segment.description}
+
+
+class AddHostView(forms.ModalFormView):
+    template_name = 'masakaridashboard/segments/addhost.html'
+    modal_header = _("Add Host")
+    form_id = "add_host"
+    form_class = segment_forms.AddHostForm
+    submit_label = _("Add Host")
+    submit_url = "horizon:masakaridashboard:segments:addhost"
+    success_url = reverse_lazy("horizon:masakaridashboard:hosts:index")
+    page_title = _("Add Host")
+
+    @memoized.memoized_method
+    def get_object(self):
+
+        segments = api.segment_list(self.request)
+        host_list = []
+        for segment in segments:
+            host_gen = api.get_host_list(
+                self.request, segment.uuid, filters={})
+            for item in host_gen:
+                host_list.append(item.name)
+        try:
+            available_host_list = []
+            hypervisor_list = api.get_hypervisor_list(self.request)
+            for hypervisor in hypervisor_list:
+                if hypervisor.hypervisor_hostname not in host_list:
+                    available_host_list.append(hypervisor)
+            return available_host_list
+        except Exception:
+            msg = _('Unable to retrieve host list.')
+            redirect = reverse('horizon:masakaridashboard:segments:index')
+            exceptions.handle(self.request, msg, redirect=redirect)
+
+    def get_context_data(self, **kwargs):
+        context = super(AddHostView, self).get_context_data(**kwargs)
+        context['submit_url'] = reverse(
+            self.submit_url,
+            args=[self.kwargs["segment_id"]]
+        )
+
+        return context
+
+    def get_initial(self):
+        hypervisor_list = self.get_object()
+        segment_name = api.get_segment(
+            self.request, self.kwargs['segment_id']).name
+        initial = {'segment_id': self.kwargs['segment_id'],
+                   'segment_name': segment_name,
+                   'hypervisor_list': hypervisor_list,
+                   'reserved': self.kwargs.get('reserved'),
+                   'type': self.kwargs.get('service_type'),
+                   'control_attributes': self.kwargs.get('control_attributes'),
+                   'on_maintenance': self.kwargs.get('on_maintenance')
+                   }
+
+        return initial

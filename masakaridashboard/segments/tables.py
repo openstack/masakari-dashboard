@@ -22,6 +22,18 @@ from masakaridashboard.api import api
 from horizon import tables
 
 
+class AddHost(tables.LinkAction):
+    name = "add_host"
+    verbose_name = _("Add Host")
+    classes = ("ajax-modal",)
+
+    def get_link_url(self, datum):
+        obj_id = datum.uuid
+        url = "horizon:masakaridashboard:segments:addhost"
+
+        return reverse(url, args=[obj_id])
+
+
 class CreateSegment(tables.LinkAction):
     name = "create"
     verbose_name = _("Create Segment")
@@ -96,4 +108,4 @@ class FailoverSegmentTable(tables.DataTable):
         name = "failover_segment"
         verbose_name = _("FailoverSegment")
         table_actions = (DeleteSegment, CreateSegment, SegmentFilterAction)
-        row_actions = (UpdateSegment,)
+        row_actions = (UpdateSegment, AddHost)

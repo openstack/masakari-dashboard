@@ -13,14 +13,18 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from openstack.instance_ha.v1 import host
 from openstack.instance_ha.v1 import segment
 
 from openstack_dashboard.test.test_data import utils as test_data_utils
 
 from masakaridashboard.test import uuidsentinel
+from novaclient.v2.hypervisors import Hypervisor
+from novaclient.v2.hypervisors import HypervisorManager
 
 
 def data(TEST):
+
     TEST.masakari_segment = test_data_utils.TestDataContainer()
 
     segment1 = segment.Segment(uuid=uuidsentinel.segment1, name='test',
@@ -36,3 +40,20 @@ def data(TEST):
     TEST.masakari_segment.add(segment1)
     TEST.masakari_segment.add(segment2)
     TEST.masakari_segment.add(segment3)
+
+    TEST.masakari_host = test_data_utils.TestDataContainer()
+
+    host1 = host.Host(uuid=uuidsentinel.host1, name="test",
+                      reserved=True, type='service',
+                      control_attributes='test',
+                      failover_segment_id=uuidsentinel.segment1,
+                      on_maintenance=False)
+
+    TEST.masakari_host.add(host1)
+
+    TEST.hypervisors = test_data_utils.TestDataContainer()
+
+    hypervisor1 = Hypervisor(
+        HypervisorManager, {'id':  '1', 'hypervisor_hostname': "test"})
+
+    TEST.hypervisors.add(hypervisor1)

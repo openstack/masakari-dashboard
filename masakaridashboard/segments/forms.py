@@ -106,3 +106,70 @@ class UpdateForm(forms.SelfHandlingForm):
             exceptions.handle(request, msg, redirect=redirect)
 
         return True
+
+
+class AddHostForm(forms.SelfHandlingForm):
+
+    segment_id = forms.CharField(widget=forms.HiddenInput())
+    segment_name = forms.CharField(
+        label=_('Segment Name'), widget=forms.TextInput(
+            attrs={'readonly': 'readonly'}), required=False)
+    name = forms.ChoiceField(label=_('Host Name'),
+                             choices=[])
+    reserved = forms.ChoiceField(
+        label=_('Reserved'),
+        choices=[('0', 'False'),
+                 ('1', 'True')],
+        widget=forms.Select(
+            attrs={'class': 'switchable',
+                   'data-slug': 'available host'}),
+        required=False,
+        help_text=_("A boolean indicating whether this host is reserved or"
+                    " not. Default value is set to False."))
+    type = forms.CharField(
+        label=_('Type'),
+        widget=forms.TextInput(attrs={'maxlength': 255}),
+        help_text=_("Type of host."))
+    control_attributes = forms.CharField(
+        label=_('Control Attribute'),
+        widget=forms.TextInput(),
+        help_text=_("Attributes to control host."))
+    on_maintenance = forms.ChoiceField(
+        label=_('On Maintenance'),
+        choices=[('0', 'False'),
+                 ('1', 'True')],
+        widget=forms.Select(
+            attrs={'class': 'switchable',
+                   'data-slug': 'available host'}),
+        required=False,
+        help_text=_("A boolean indicating whether this host is on maintenance"
+                    " or not. Default value is set to False."))
+
+    def __init__(self, *args, **kwargs):
+        super(AddHostForm, self).__init__(*args, **kwargs)
+
+        # Populate hypervisor name choices
+        hypervisor_list = kwargs.get('initial', {}).get("hypervisor_list", [])
+        hypervisor_name_list = []
+        for hypervisor in hypervisor_list:
+            hypervisor_name_list.append(
+                (hypervisor.hypervisor_hostname, '%(name)s (%(id)s)'
+                 % {"name": hypervisor.hypervisor_hostname,
+                    "id": hypervisor.id}))
+        if hypervisor_name_list:
+            hypervisor_name_list.insert(0, ("", _("Select a host")))
+        else:
+            hypervisor_name_list.insert(0, ("", _("No host available")))
+        self.fields['name'].choices = hypervisor_name_list
+
+    def handle(self, request, data):
+        try:
+            api.create_host(request, data)
+            msg = _('Host created successfully.')
+            messages.success(request, msg)
+        except Exception:
+            msg = _('Failed to create host.')
+            redirect = reverse('horizon:masakaridashboard:segments:index')
+            exceptions.handle(request, msg, redirect=redirect)
+
+        return True

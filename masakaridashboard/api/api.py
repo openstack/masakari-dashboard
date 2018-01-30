@@ -23,6 +23,7 @@ from horizon.utils import memoized
 from keystoneauth1.identity.generic import token
 from keystoneauth1 import session as ks_session
 from openstack import connection
+from openstack_dashboard.api import nova as nova_api
 
 from masakaridashboard.handle_errors import handle_errors
 
@@ -38,6 +39,10 @@ def openstack_connection(request):
     conn = connection.Connection(session=session)
 
     return conn.instance_ha
+
+
+def get_hypervisor_list(request):
+    return nova_api.hypervisor_list(request)
 
 
 @handle_errors(_("Unable to retrieve segments"), [])
@@ -123,3 +128,21 @@ def segment_update(request, segment_id, fields_to_update):
     """Update segment."""
     return openstack_connection(request).update_segment(
         segment_id, **fields_to_update)
+
+
+def create_host(request, data):
+    """Create Host."""
+    attrs = {'name': data['name'],
+             'reserved': data['reserved'],
+             'type': data['type'],
+             'control_attributes': data['control_attributes'],
+             'on_maintenance': data['on_maintenance']}
+
+    return openstack_connection(request).create_host(
+        data['segment_id'], **attrs)
+
+
+@handle_errors(_("Unable to get host list"), [])
+def get_host_list(request, segment_id, filters):
+    """Returns host list."""
+    return openstack_connection(request).hosts(segment_id, **filters)

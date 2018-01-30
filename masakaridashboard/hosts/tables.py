@@ -1,0 +1,53 @@
+# Copyright (c) 2018 NTT DATA
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from django.utils.translation import ugettext_lazy as _
+from horizon import tables
+
+HOST_FILTER_CHOICES = (
+    ('failover_segment_id', _("Segment Id ="), True),
+    ('type', _("Type ="), True),
+    ('on_maintenance', _("On Maintenance ="), True),
+    ('reserved', _("Reserved ="), True),
+)
+
+
+class HostFilterAction(tables.FilterAction):
+    filter_type = "server"
+    filter_choices = HOST_FILTER_CHOICES
+
+
+class HostTable(tables.DataTable):
+
+    name = tables.Column('name', verbose_name=_("Name"))
+    uuid = tables.Column('uuid', verbose_name=_("UUID"))
+    reserved = tables.Column(
+        'reserved', verbose_name=_("Reserved"))
+    type = tables.Column(
+        'type', verbose_name=_("Type"))
+    control_attributes = tables.Column(
+        'control_attributes', verbose_name=_(
+            "Control Attribute"), truncate=40)
+    on_maintenance = tables.Column(
+        'on_maintenance', verbose_name=_("On Maintenance"))
+    failover_segment_id = tables.Column(
+        'failover_segment_id', verbose_name=_("Failover Segment"))
+
+    def get_object_id(self, datum):
+        return datum.uuid + ',' + datum.failover_segment_id
+
+    class Meta(object):
+        name = "host"
+        verbose_name = _("Host")
+        table_actions = (HostFilterAction,)
