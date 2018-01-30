@@ -35,6 +35,7 @@ class HostTest(test.TestCase):
                 return_value=hosts):
             res = self.client.get(INDEX_URL)
         self.assertTemplateUsed(res, 'masakaridashboard/hosts/index.html')
+        self.assertEqual(res.status_code, 200)
 
     def test_create_post(self):
         segment = self.masakari_segment.list()
@@ -47,9 +48,9 @@ class HostTest(test.TestCase):
             'segment_name': segment[0].name,
             'name': host.name,
             'type': host.type,
-            'reserved': '1',
+            'reserved': host.reserved,
             'control_attributes': host.control_attributes,
-            'on_maintenance': '0'
+            'on_maintenance': host.on_maintenance
         }
         with mock.patch('masakaridashboard.api.api.segment_list',
                         return_value=segment), mock.patch(
@@ -107,3 +108,45 @@ class HostTest(test.TestCase):
         self.assertTemplateUsed(res, 'horizon/common/_detail.html')
         self.assertTemplateUsed(
             res, 'masakaridashboard/hosts/_detail_overview.html')
+
+    def test_update(self):
+        host_to_update = self.masakari_host.list()[0]
+        id_to_update = (
+            host_to_update.uuid+','+host_to_update.failover_segment_id)
+        update_url = reverse('horizon:masakaridashboard:hosts:update',
+                             args=[id_to_update])
+        host_to_update.control_attributes = 'fake'
+        form_data = {
+            'failover_segment_id': host_to_update.failover_segment_id,
+            'uuid': host_to_update.uuid,
+            'name': host_to_update.name,
+            'type': host_to_update.type,
+            'reserved': host_to_update.reserved,
+            'control_attributes': host_to_update.control_attributes,
+            'on_maintenance': host_to_update.on_maintenance
+        }
+        with mock.patch(
+                'masakaridashboard.api.api.get_host',
+                return_value=self.masakari_host.list()[0]), mock.patch(
+                'masakaridashboard.api.api.update_host',
+                return_value=host_to_update) as mocked_update:
+            res = self.client.post(update_url, form_data)
+
+        self.assertNoFormErrors(res)
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirectsNoFollow(res, INDEX_URL)
+
+        fields_to_update = {
+            'name': host_to_update.name,
+            'type': host_to_update.type,
+            'reserved': host_to_update.reserved,
+            'control_attributes': host_to_update.control_attributes,
+            'on_maintenance': host_to_update.on_maintenance
+        }
+
+        mocked_update.assert_called_once_with(
+            mock.ANY,
+            host_to_update.uuid,
+            host_to_update.failover_segment_id,
+            fields_to_update
+        )

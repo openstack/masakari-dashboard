@@ -153,6 +153,11 @@ def delete_host(request, host_id, segment_id):
         host_id, segment_id, False)
 
 
-def get_host(request, segment_id, host_id):
-    """return single host."""
+def update_host(request, host_uuid, failover_segment_id, fields_to_update):
+    return openstack_connection(request).update_host(
+        host_uuid, failover_segment_id, **fields_to_update)
+
+
+def get_host(request, host_id, segment_id):
+    """return single host """
     return openstack_connection(request).get_host(host_id, segment_id)

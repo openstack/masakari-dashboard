@@ -118,8 +118,8 @@ class AddHostForm(forms.SelfHandlingForm):
                              choices=[])
     reserved = forms.ChoiceField(
         label=_('Reserved'),
-        choices=[('0', 'False'),
-                 ('1', 'True')],
+        choices=[('False', 'False'),
+                 ('True', 'True')],
         widget=forms.Select(
             attrs={'class': 'switchable',
                    'data-slug': 'available host'}),
@@ -136,8 +136,8 @@ class AddHostForm(forms.SelfHandlingForm):
         help_text=_("Attributes to control host."))
     on_maintenance = forms.ChoiceField(
         label=_('On Maintenance'),
-        choices=[('0', 'False'),
-                 ('1', 'True')],
+        choices=[('False', 'False'),
+                 ('True', 'True')],
         widget=forms.Select(
             attrs={'class': 'switchable',
                    'data-slug': 'available host'}),

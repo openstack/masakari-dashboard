@@ -64,6 +64,18 @@ class DeleteHost(tables.DeleteAction):
             exceptions.handle(self.request, msg, redirect=redirect)
 
 
+class UpdateHost(tables.LinkAction):
+
+    name = "update"
+    verbose_name = _("Update Host")
+    classes = ("ajax-modal",)
+
+    def get_link_url(self, datum):
+        host_id = datum.uuid+','+datum.failover_segment_id
+        url = "horizon:masakaridashboard:hosts:update"
+        return reverse(url, args=[host_id])
+
+
 class HostTable(tables.DataTable):
 
     name = tables.Column('name', verbose_name=_("Name"),
@@ -71,8 +83,7 @@ class HostTable(tables.DataTable):
     uuid = tables.Column('uuid', verbose_name=_("UUID"))
     reserved = tables.Column(
         'reserved', verbose_name=_("Reserved"))
-    type = tables.Column(
-        'type', verbose_name=_("Type"))
+    type = tables.WrappingColumn('type', verbose_name=_("Type"))
     control_attributes = tables.Column(
         'control_attributes', verbose_name=_(
             "Control Attribute"), truncate=40)
@@ -89,3 +100,4 @@ class HostTable(tables.DataTable):
         name = "host"
         verbose_name = _("Host")
         table_actions = (HostFilterAction, DeleteHost)
+        row_actions = (UpdateHost,)

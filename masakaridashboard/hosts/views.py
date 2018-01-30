@@ -14,14 +14,17 @@
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import exceptions
+from horizon import forms
 from horizon import tables
 from horizon import tabs
 from horizon.utils import memoized
 
 from masakaridashboard.api import api
+from masakaridashboard.hosts import forms as host_forms
 from masakaridashboard.hosts import tables as masakari_tab
 from masakaridashboard.hosts import tabs as host_tab
 
@@ -74,7 +77,10 @@ class DetailView(tabs.TabbedTableView):
         segment_id = row_data[1]
         host_id = row_data[0]
         try:
-            host = api.get_host(self.request, segment_id, host_id)
+            row_data = self.kwargs['host_id'].split(',')
+            segment_id = row_data[1]
+            host_id = row_data[0]
+            host = api.get_host(self.request, host_id, segment_id)
         except Exception:
             msg = _('Unable to get host "%s".') % host_id
             redirect = reverse('horizon:masakaridashboard:hosts:index')
@@ -88,3 +94,47 @@ class DetailView(tabs.TabbedTableView):
     def get_tabs(self, request, *args, **kwargs):
         host = self.get_data()
         return self.tab_group_class(request, host=host, **kwargs)
+
+
+class UpdateView(forms.ModalFormView):
+    template_name = 'masakaridashboard/hosts/update.html'
+    modal_header = _("Update Host")
+    form_id = "update_host"
+    form_class = host_forms.UpdateHostForm
+    submit_label = _("Update")
+    submit_url = "horizon:masakaridashboard:hosts:update"
+    success_url = reverse_lazy("horizon:masakaridashboard:hosts:index")
+    page_title = _("Update Host")
+
+    @memoized.memoized_method
+    def get_object(self):
+        try:
+            row_data = self.kwargs['host_id'].split(',')
+            host_id = row_data[0]
+            segment_id = row_data[1]
+            host = api.get_host(self.request, host_id, segment_id)
+            return host
+        except Exception:
+            msg = _('Unable to retrieve host.')
+            redirect = reverse('horizon:masakaridashboard:hosts:index')
+            exceptions.handle(self.request, msg, redirect=redirect)
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateView, self).get_context_data(**kwargs)
+        context['submit_url'] = reverse(
+            self.submit_url,
+            args=[self.kwargs['host_id']]
+        )
+
+        return context
+
+    def get_initial(self, **kwargs):
+        host = self.get_object()
+
+        return {'name': host.name,
+                'reserved': host.reserved,
+                'type': host.type,
+                'control_attributes': host.control_attributes,
+                'on_maintenance': host.on_maintenance,
+                'uuid': host.uuid,
+                'failover_segment_id': host.failover_segment_id}

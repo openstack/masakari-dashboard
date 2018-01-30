@@ -44,10 +44,10 @@ def data(TEST):
     TEST.masakari_host = test_data_utils.TestDataContainer()
 
     host1 = host.Host(uuid=uuidsentinel.host1, name="test",
-                      reserved=True, type='service',
+                      reserved='True', type='service',
                       control_attributes='test',
                       failover_segment_id=uuidsentinel.segment1,
-                      on_maintenance=False)
+                      on_maintenance='False')
 
     TEST.masakari_host.add(host1)
 

@@ -21,4 +21,5 @@ HOST = r'^(?P<host_id>[^/]+)/%s$'
 urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(HOST % 'detail', views.DetailView.as_view(), name='detail'),
+    url(HOST % 'update', views.UpdateView.as_view(), name='update'),
 ]
