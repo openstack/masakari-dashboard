@@ -13,11 +13,13 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import mock
+
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.test.utils import override_settings
 from django.utils.http import urlunquote
-import mock
+from openstack_dashboard.test import helpers
 
 from masakaridashboard.segments import tables as segment_table
 from masakaridashboard.test import helpers as test
@@ -38,7 +40,8 @@ class SegmentTest(test.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, 'masakaridashboard/segments/index.html')
         mock_get_segment_list.assert_called_once_with(
-            filters={}, marker=None, paginate=True, request=mock.ANY)
+            filters={}, marker=None, paginate=True,
+            request=helpers.IsHttpRequest())
         segments = res.context['failover_segment_table'].data
         self.assertItemsEqual(segments, self.masakari_segment.list())
 
@@ -62,7 +65,7 @@ class SegmentTest(test.TestCase):
         self.assertRedirectsNoFollow(res, INDEX_URL)
 
         mocked_create.assert_called_once_with(
-            mock.ANY,
+            helpers.IsHttpRequest(),
             form_data
         )
 
@@ -77,7 +80,8 @@ class SegmentTest(test.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, 'masakaridashboard/segments/index.html')
         mock_get_segment_list.assert_called_once_with(
-            filters=filters, marker=marker, paginate=True, request=mock.ANY)
+            filters=filters, marker=marker, paginate=True,
+            request=helpers.IsHttpRequest())
 
         return res
 
@@ -167,7 +171,7 @@ class SegmentTest(test.TestCase):
         self.assertNoFormErrors(res)
         self.assertRedirectsNoFollow(res, INDEX_URL)
         mocked_delete.assert_called_once_with(
-            mock.ANY,
+            helpers.IsHttpRequest(),
             segment.uuid,
             ignore_missing=True
         )
@@ -185,3 +189,34 @@ class SegmentTest(test.TestCase):
         self.assertTemplateUsed(res, 'horizon/common/_detail.html')
         self.assertTemplateUsed(
             res, 'masakaridashboard/segments/_detail_overview.html')
+
+    def test_update(self):
+        segment_obj = self.masakari_segment.list()[0]
+        update_url = reverse('horizon:masakaridashboard:segments:update',
+                             args=[segment_obj.uuid])
+        segment_obj.name = 'fake'
+        form_data = {
+            'uuid': segment_obj.uuid,
+            'name': segment_obj.name,
+            'recovery_method': segment_obj.recovery_method,
+            'description': segment_obj.description}
+
+        with mock.patch(
+                'masakaridashboard.api.api.get_segment',
+                return_value=self.masakari_segment.list()[0]), mock.patch(
+            'masakaridashboard.api.api.segment_update',
+                return_value=segment_obj) as mocked_update:
+            res = self.client.post(update_url, form_data)
+        self.assertNoFormErrors(res)
+        self.assertEqual(res.status_code, 302)
+        self.assertRedirectsNoFollow(res, INDEX_URL)
+        data_to_update = {
+            'name': segment_obj.name,
+            'recovery_method': segment_obj.recovery_method,
+            'description': segment_obj.description}
+
+        mocked_update.assert_called_once_with(
+            helpers.IsHttpRequest(),
+            segment_obj.uuid,
+            data_to_update
+        )

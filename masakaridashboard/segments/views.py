@@ -132,3 +132,41 @@ class DetailView(tabs.TabbedTableView):
     def get_tabs(self, request, *args, **kwargs):
         segment = self.get_data()
         return self.tab_group_class(request, segment=segment, **kwargs)
+
+
+class UpdateView(forms.ModalFormView):
+    template_name = 'masakaridashboard/segments/update.html'
+    modal_header = _("Update Segment")
+    form_id = "update_segment"
+    form_class = segment_forms.UpdateForm
+    submit_label = _("Update")
+    submit_url = "horizon:masakaridashboard:segments:update"
+    success_url = reverse_lazy("horizon:masakaridashboard:segments:index")
+    page_title = _("Update Segment")
+
+    @memoized.memoized_method
+    def get_object(self):
+        try:
+            segment = api.get_segment(self.request, self.kwargs['segment_id'])
+            return segment
+        except Exception:
+            msg = _('Unable to retrieve segment.')
+            redirect = reverse('horizon:masakaridashboard:segments:index')
+            exceptions.handle(self.request, msg, redirect=redirect)
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateView, self).get_context_data(**kwargs)
+        context['submit_url'] = reverse(
+            self.submit_url,
+            args=[self.kwargs["segment_id"]]
+        )
+
+        return context
+
+    def get_initial(self, **kwargs):
+        segment = self.get_object()
+
+        return {'uuid': self.kwargs['segment_id'],
+                'name': segment.name,
+                'recovery_method': segment.recovery_method,
+                'description': segment.description}

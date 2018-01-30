@@ -116,3 +116,10 @@ def get_segment(request, segment_id):
 def segment_delete(request, segment_id, ignore_missing=True):
     return openstack_connection(request).delete_segment(
         segment_id, ignore_missing)
+
+
+@handle_errors(_("Unable to update segment"), [])
+def segment_update(request, segment_id, fields_to_update):
+    """Update segment."""
+    return openstack_connection(request).update_segment(
+        segment_id, **fields_to_update)

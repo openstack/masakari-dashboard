@@ -67,3 +67,42 @@ class CreateSegmentForm(forms.SelfHandlingForm):
             redirect = reverse('horizon:masakaridashboard:segments:index')
             exceptions.handle(request, msg, redirect=redirect)
         return True
+
+
+class UpdateForm(forms.SelfHandlingForm):
+    uuid = forms.CharField(widget=forms.HiddenInput())
+    name = forms.CharField(
+        label=_('Segment Name'),
+        widget=forms.TextInput(attrs={'maxlength': 255}))
+    recovery_method = forms.ChoiceField(
+        label=_('Recovery Method'),
+        choices=[('auto', 'auto'),
+                 ('auto_priority', 'auto_priority'),
+                 ('reserved_host', 'reserved_host'),
+                 ('rh_priority', 'rh_priority')],
+        widget=forms.Select(
+            attrs={'class': 'switchable',
+                   'data-slug': 'recovery_method'}),
+        required=False
+    )
+    description = forms.CharField(
+        label=_('Description'),
+        widget=forms.Textarea(
+            attrs={'width': "100%", 'cols': "80", 'rows': "5", }),
+        required=False
+    )
+
+    def handle(self, request, data):
+        try:
+            fields_to_update = {'name': data['name'],
+                                'recovery_method': data['recovery_method'],
+                                'description': data['description']}
+            api.segment_update(request, data['uuid'], fields_to_update)
+            msg = _('Successfully updated segment.')
+            messages.success(request, msg)
+        except Exception:
+            msg = _('Failed to update segment.')
+            redirect = reverse('horizon:masakaridashboard:segments:index')
+            exceptions.handle(request, msg, redirect=redirect)
+
+        return True

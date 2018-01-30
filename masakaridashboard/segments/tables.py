@@ -13,6 +13,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext_lazy
 
@@ -61,6 +62,18 @@ class DeleteSegment(tables.DeleteAction):
         api.segment_delete(request, segment_uuid, ignore_missing=True)
 
 
+class UpdateSegment(tables.LinkAction):
+    name = "update"
+    verbose_name = _("Update Segment")
+    classes = ("ajax-modal",)
+
+    def get_link_url(self, datum):
+        obj_id = datum.uuid
+        url = "horizon:masakaridashboard:segments:update"
+
+        return reverse(url, args=[obj_id])
+
+
 class FailoverSegmentTable(tables.DataTable):
 
     name = tables.WrappingColumn(
@@ -83,3 +96,4 @@ class FailoverSegmentTable(tables.DataTable):
         name = "failover_segment"
         verbose_name = _("FailoverSegment")
         table_actions = (DeleteSegment, CreateSegment, SegmentFilterAction)
+        row_actions = (UpdateSegment,)
