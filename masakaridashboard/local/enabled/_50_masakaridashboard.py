@@ -13,6 +13,13 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import pbr.version
+from openstack_dashboard import exceptions
 
-version_info = pbr.version.VersionInfo('masakaridashboard')
+DASHBOARD = 'masakaridashboard'
+ADD_INSTALLED_APPS = ['masakaridashboard']
+
+ADD_EXCEPTIONS = {
+    'recoverable': exceptions.RECOVERABLE,
+    'not_found': exceptions.NOT_FOUND,
+    'unauthorized': exceptions.UNAUTHORIZED,
+}

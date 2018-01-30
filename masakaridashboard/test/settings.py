@@ -1,4 +1,5 @@
-# Copyright (c) 2018 NTT DATA
+# Copyright (C) 2018 NTT DATA
+# All Rights Reserved.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -22,13 +23,13 @@ HORIZON_CONFIG.pop('dashboards', None)
 HORIZON_CONFIG.pop('default_dashboard', None)
 
 # Update the dashboards with masakaridashboard
-import masakaridashboard.enabled
+from masakaridashboard.local import enabled
 import openstack_dashboard.enabled
 from openstack_dashboard.utils import settings
 
 settings.update_dashboards(
     [
-        masakaridashboard.enabled,
+        enabled,
         openstack_dashboard.enabled,
     ],
     HORIZON_CONFIG,
@@ -36,4 +37,9 @@ settings.update_dashboards(
 )
 
 # Ensure any duplicate apps are removed after the update_dashboards call
+
 INSTALLED_APPS = list(set(INSTALLED_APPS))
+NOSE_ARGS = ['--nocapture',
+             '--nologcapture',
+             '--cover-package=masakaridashboard',
+             '--cover-inclusive']

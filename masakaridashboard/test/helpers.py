@@ -13,6 +13,16 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import pbr.version
+from openstack_dashboard.test import helpers
 
-version_info = pbr.version.VersionInfo('masakaridashboard')
+from masakaridashboard.test.test_data import utils
+
+
+class MasakariTestsMixin(object):
+    def _setup_test_data(self):
+        super(MasakariTestsMixin, self)._setup_test_data()
+        utils.load_test_data(self)
+
+
+class TestCase(MasakariTestsMixin, helpers.TestCase):
+    pass

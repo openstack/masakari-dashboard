@@ -13,6 +13,16 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import pbr.version
+from django.utils.translation import ugettext_lazy as _
 
-version_info = pbr.version.VersionInfo('masakaridashboard')
+import horizon
+
+from masakaridashboard import dashboard
+
+
+class Segment(horizon.Panel):
+    name = _("Segments")
+    slug = 'segments'
+
+
+dashboard.MasakariDashboard.register(Segment)

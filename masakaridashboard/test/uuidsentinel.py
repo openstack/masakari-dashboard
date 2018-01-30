@@ -13,6 +13,21 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import pbr.version
+import sys
 
-version_info = pbr.version.VersionInfo('masakaridashboard')
+
+class UUIDSentinels(object):
+    def __init__(self):
+        from oslo_utils import uuidutils
+        self._uuid_module = uuidutils
+        self._sentinels = {}
+
+    def __getattr__(self, name):
+        if name.startswith('_'):
+            raise ValueError('Sentinels must not start with _')
+        if name not in self._sentinels:
+            self._sentinels[name] = self._uuid_module.generate_uuid()
+        return self._sentinels[name]
+
+
+sys.modules[__name__] = UUIDSentinels()

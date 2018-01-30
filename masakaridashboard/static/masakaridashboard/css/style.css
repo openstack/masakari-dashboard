@@ -1,0 +1,48 @@
+.masakari-wrapper.list{
+    list-style: inherit;
+}
+
+.masakari-wrapper #actions{
+    width:100%;
+}
+
+.masakari-wrapper #actions a.btn{
+    width:initial;
+}
+
+.masakari-wrapper.detail-screen .page-breadcrumb ol li{
+    max-width: inherit;
+}
+
+.masakari-wrapper.detail-screen .page-breadcrumb li:last-child{
+    display:none;
+}
+
+.masakari-wrapper .navbar-brand{
+    padding: 6px 10px;
+}
+
+.boolfield{
+    font-style: italic;
+}
+
+.boolfield i{
+    padding-right: .2em;
+}
+
+.boolfield i.green{
+    color: green;
+}
+
+.boolfield i.red{
+    color: red;
+}
+
+.line-space{
+    margin: .3em 0;
+}
+
+.line-space dd{
+    display:inline-block;
+    margin-left: 1.5em;
+}

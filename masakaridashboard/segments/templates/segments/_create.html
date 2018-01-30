@@ -1,0 +1,18 @@
+{% extends "horizon/common/_modal_form.html" %}
+{% load i18n %}
+{% block form_attrs %}enctype="multipart/form-data"{% endblock %}
+{% block modal-body-right %}
+<h3>{% trans "Description:" %}</h3>
+<p>{% trans "Create a failover segment of hypervisor hosts." %}</p>
+<p>
+    <strong>{% trans "Recovery methods:" %}</strong>
+</p>
+<p>{% trans "auto: Nova selects the new compute host for evacuation of instances running on  a failed compute host" %}</p>
+<p>{% trans "reserved_host : One of the reserved host configured in the segment will be used for evacuation of instances running on a failed compute host" %}</p>
+<p>{% trans "auto_priority: First it will try 'auto' recovery method, if it's fails, then it will try using 'reserved_host' recovery method." %}</p>
+<p>{% trans "rh_priority: It is exactly opposite of 'auto_priority' recovery method." %}</p>
+<p>
+    <strong>{% trans "Please note: " %}</strong>
+    {% trans "Service Type is presently not used by Masakari but it's a mandatory field so the default value is set to 'compute' and it cannot be changed." %}
+</p>
+{% endblock %}

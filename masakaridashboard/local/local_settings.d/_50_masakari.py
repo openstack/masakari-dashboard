@@ -13,6 +13,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import pbr.version
+from openstack_dashboard.settings import POLICY_FILES
 
-version_info = pbr.version.VersionInfo('masakaridashboard')
+
+POLICY_FILES.update({'instance-ha': 'masakari_policy.json'})

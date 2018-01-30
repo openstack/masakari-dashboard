@@ -13,6 +13,20 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import pbr.version
+from django.utils.translation import ugettext_lazy as _
 
-version_info = pbr.version.VersionInfo('masakaridashboard')
+import horizon
+
+from masakaridashboard.default import panel
+
+
+class MasakariDashboard(horizon.Dashboard):
+    slug = "masakaridashboard"
+    name = _("Instance-ha")
+    panels = ('default', 'segments')
+    default_panel = 'default'
+    policy_rules = (('instance-ha', 'context_is_admin'),)
+
+
+horizon.register(MasakariDashboard)
+MasakariDashboard.register(panel.Default)

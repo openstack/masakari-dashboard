@@ -13,6 +13,21 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import pbr.version
+from openstack_dashboard.test.test_data import utils
 
-version_info = pbr.version.VersionInfo('masakaridashboard')
+
+def load_test_data(load_onto=None):
+    from masakaridashboard.test.test_data import masakari_data
+    from openstack_dashboard.test.test_data import exceptions
+
+    # The order of these loaders matters, some depend on others.
+    loaders = (
+        exceptions.data,
+        masakari_data.data,
+    )
+    if load_onto:
+        for data_func in loaders:
+            data_func(load_onto)
+        return load_onto
+    else:
+        return utils.TestData(*loaders)

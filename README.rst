@@ -53,7 +53,9 @@ Install Masakari dashboard with all dependencies in your virtual environment::
 
 And enable it in Horizon::
 
-    ln -s ../masakari-dashboard/masakaridashboard/enabled/_90_project_MasakariDashboard.py openstack_dashboard/local/enabled
+    ln -s ../masakari-dashboard/masakaridashboard/local/enabled/_50_masakaridashboard.py openstack_dashboard/local/enabled
+    ln -s ../masakari-dashboard/masakaridashboard/local/local_settings.d/_50_masakari.py openstack_dashboard/local/local_settings.d
+    ln -s ../masakari-dashboard/masakaridashboard/conf/masakari_policy.json openstack_dashboard/conf
 
 To run horizon with the newly enabled Masakari dashboard plugin run::
 
