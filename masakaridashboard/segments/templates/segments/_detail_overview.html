@@ -1,0 +1,21 @@
+{% load i18n sizeformat parse_date %}
+  <div class="detail">
+        <h4>{% trans "Segment Detail" %}</h4>
+        <hr class="header_rule">
+        <dl class="dl-horizontal">
+            <dt>{% trans "Name" %}</dt>
+            <dd>{{ segment.name }}</dd>
+            <dt>{% trans "ID" %}</dt>
+            <dd>{{ segment.id }}</dd>
+            <dt>{% trans "Description" %}</dt>
+            <dd>{{ segment.description }}</dd>
+            <dt>{% trans "Recovery Method" %}</dt>
+            <dd>{{ segment.recovery_method }}</dd>
+            <dt>{% trans "Service Type" %}</dt>
+            <dd>{{ segment.service_type }}</dd>
+            <dt>{% trans "Created at" %}</dt>
+            <dd>{{ segment.created_at|parse_isotime }}</dd>
+            <dt>{% trans "Updated at" %}</dt>
+            <dd>{{ segment.updated_at|parse_isotime }}</dd>
+        </dl>
+  </div>

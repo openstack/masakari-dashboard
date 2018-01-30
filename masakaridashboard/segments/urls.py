@@ -18,9 +18,11 @@ from django.conf.urls import url
 from masakaridashboard.segments import views
 
 
+SEGMENT = r'^(?P<segment_id>[^/]+)/%s$'
 urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'^create_segment$',
         views.CreateSegmentView.as_view(),
         name='create_segment'),
+    url(SEGMENT % 'detail', views.DetailView.as_view(), name='detail'),
 ]

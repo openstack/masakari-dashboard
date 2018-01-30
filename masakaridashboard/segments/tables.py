@@ -63,8 +63,11 @@ class DeleteSegment(tables.DeleteAction):
 
 class FailoverSegmentTable(tables.DataTable):
 
-    name = tables.WrappingColumn('name', verbose_name=_("Name"), truncate=40)
-    uuid = tables.Column('uuid', verbose_name=_("UUID"))
+    name = tables.WrappingColumn(
+        'name', verbose_name=_("Name"),
+        link="horizon:masakaridashboard:segments:detail", truncate=40)
+    uuid = tables.Column('uuid', verbose_name=_("UUID"),
+                         link="horizon:masakaridashboard:segments:detail")
     recovery_method = tables.Column(
         'recovery_method', verbose_name=_("Recovery Method"))
     service_type = tables.Column(

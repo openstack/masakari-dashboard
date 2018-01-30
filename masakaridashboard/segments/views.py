@@ -14,6 +14,7 @@
 #    under the License.
 
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
@@ -23,7 +24,12 @@ from masakaridashboard.segments import tables as masakari_tab
 
 from horizon import exceptions
 from horizon import forms
+
+from horizon.utils import memoized
 from masakaridashboard.segments import forms as segment_forms
+
+from horizon import tabs
+from masakaridashboard.segments import tabs as seg_tab
 
 
 class IndexView(tables.DataTableView):
@@ -92,3 +98,37 @@ class CreateSegmentView(forms.ModalFormView):
     def get_form_kwargs(self):
         kwargs = super(CreateSegmentView, self).get_form_kwargs()
         return kwargs
+
+
+class DetailView(tabs.TabbedTableView):
+    tab_group_class = seg_tab.SegmentDetailTabs
+    template_name = 'horizon/common/_detail.html'
+    page_title = "{{ segment.name|default:segment.id }}"
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailView, self).get_context_data(**kwargs)
+        segment = self.get_data()
+        table = masakari_tab.FailoverSegmentTable(self.request)
+        context["segment"] = segment
+        context["url"] = self.get_redirect_url()
+        context["actions"] = table.render_row_actions(segment)
+        return context
+
+    @memoized.memoized_method
+    def get_data(self):
+        try:
+            segment_id = self.kwargs['segment_id']
+            segment = api.get_segment(self.request, segment_id)
+        except Exception:
+            msg = _('Unable to get segment "%s".') % segment_id
+            redirect = reverse('horizon:masakaridashboard:segments:index')
+            exceptions.handle(self.request, msg, redirect=redirect)
+
+        return segment
+
+    def get_redirect_url(self):
+        return reverse('horizon:masakaridashboard:segments:index')
+
+    def get_tabs(self, request, *args, **kwargs):
+        segment = self.get_data()
+        return self.tab_group_class(request, segment=segment, **kwargs)

@@ -171,3 +171,17 @@ class SegmentTest(test.TestCase):
             segment.uuid,
             ignore_missing=True
         )
+
+    def test_detail(self):
+        segment = self.masakari_segment.list()[0]
+        detail_url = reverse('horizon:masakaridashboard:segments:detail',
+                             args=[segment.uuid])
+        with mock.patch('masakaridashboard.api.api.get_segment',
+                        return_value=segment):
+            res = self.client.get(detail_url)
+        self.assertNoFormErrors(res)
+        self.assertEqual(200, res.status_code)
+        self.assertEqual(segment.uuid, res.context['segment'].uuid)
+        self.assertTemplateUsed(res, 'horizon/common/_detail.html')
+        self.assertTemplateUsed(
+            res, 'masakaridashboard/segments/_detail_overview.html')
