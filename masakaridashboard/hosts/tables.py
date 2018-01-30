@@ -12,8 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ungettext_lazy
+
+from horizon import exceptions
 from horizon import tables
+
+from masakaridashboard.api import api
+
 
 HOST_FILTER_CHOICES = (
     ('failover_segment_id', _("Segment Id ="), True),
@@ -26,6 +33,35 @@ HOST_FILTER_CHOICES = (
 class HostFilterAction(tables.FilterAction):
     filter_type = "server"
     filter_choices = HOST_FILTER_CHOICES
+
+
+class DeleteHost(tables.DeleteAction):
+    @staticmethod
+    def action_present(count):
+        return ungettext_lazy(
+            u"Delete Host",
+            u"Delete Hosts",
+            count
+        )
+
+    @staticmethod
+    def action_past(count):
+        return ungettext_lazy(
+            u"Deleted Host",
+            u"Deleted Hosts",
+            count
+        )
+
+    def delete(self, request, data):
+        row_data = data.split(',')
+        segment_uuid = row_data[1]
+        host_uuid = row_data[0]
+        try:
+            api.delete_host(request, host_uuid, segment_uuid)
+        except Exception:
+            msg = _('Unable to delete host.')
+            redirect = reverse('horizon:masakaridashboard:hosts:index')
+            exceptions.handle(self.request, msg, redirect=redirect)
 
 
 class HostTable(tables.DataTable):
@@ -50,4 +86,4 @@ class HostTable(tables.DataTable):
     class Meta(object):
         name = "host"
         verbose_name = _("Host")
-        table_actions = (HostFilterAction,)
+        table_actions = (HostFilterAction, DeleteHost)

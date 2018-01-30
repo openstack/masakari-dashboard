@@ -70,3 +70,26 @@ class HostTest(test.TestCase):
             mock.ANY,
             form_data
         )
+
+    def test_delete_ok(self):
+        host = self.masakari_host.list()[0]
+        data = {'object_ids': host.uuid + ',' + host.failover_segment_id,
+                'action': 'host__delete'}
+        with mock.patch(
+                'masakaridashboard.api.api.segment_list',
+                return_value=[self.masakari_segment.first(
+                )]), mock.patch(
+                'masakaridashboard.api.api.get_host_list',
+                return_value=self.masakari_host.list()), mock.patch(
+                'masakaridashboard.api.api.delete_host',
+                return_value=None
+        ) as mocked_delete:
+            res = self.client.post(INDEX_URL, data)
+
+        self.assertNoFormErrors(res)
+        self.assertRedirectsNoFollow(res, INDEX_URL)
+        mocked_delete.assert_called_once_with(
+            mock.ANY,
+            host.uuid,
+            host.failover_segment_id,
+        )
