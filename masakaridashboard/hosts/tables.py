@@ -66,7 +66,8 @@ class DeleteHost(tables.DeleteAction):
 
 class HostTable(tables.DataTable):
 
-    name = tables.Column('name', verbose_name=_("Name"))
+    name = tables.Column('name', verbose_name=_("Name"),
+                         link="horizon:masakaridashboard:hosts:detail")
     uuid = tables.Column('uuid', verbose_name=_("UUID"))
     reserved = tables.Column(
         'reserved', verbose_name=_("Reserved"))
@@ -78,7 +79,8 @@ class HostTable(tables.DataTable):
     on_maintenance = tables.Column(
         'on_maintenance', verbose_name=_("On Maintenance"))
     failover_segment_id = tables.Column(
-        'failover_segment_id', verbose_name=_("Failover Segment"))
+        'failover_segment_id', verbose_name=_("Failover Segment"),
+        link="horizon:masakaridashboard:segments:detail")
 
     def get_object_id(self, datum):
         return datum.uuid + ',' + datum.failover_segment_id

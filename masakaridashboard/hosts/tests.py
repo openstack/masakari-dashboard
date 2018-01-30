@@ -93,3 +93,17 @@ class HostTest(test.TestCase):
             host.uuid,
             host.failover_segment_id,
         )
+
+    def test_detail(self):
+        host = self.masakari_host.list()[0]
+        id_to_update = host.uuid+','+host.failover_segment_id
+        detail_url = reverse('horizon:masakaridashboard:hosts:detail',
+                             args=[id_to_update])
+        with mock.patch('masakaridashboard.api.api.get_host',
+                        return_value=self.masakari_host.list()[0]):
+            res = self.client.get(detail_url)
+        self.assertNoFormErrors(res)
+        self.assertEqual(200, res.status_code)
+        self.assertTemplateUsed(res, 'horizon/common/_detail.html')
+        self.assertTemplateUsed(
+            res, 'masakaridashboard/hosts/_detail_overview.html')

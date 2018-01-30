@@ -151,3 +151,8 @@ def get_host_list(request, segment_id, filters):
 def delete_host(request, host_id, segment_id):
     return openstack_connection(request).delete_host(
         host_id, segment_id, False)
+
+
+def get_host(request, segment_id, host_id):
+    """return single host."""
+    return openstack_connection(request).get_host(host_id, segment_id)

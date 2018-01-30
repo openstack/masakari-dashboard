@@ -1,4 +1,4 @@
-# Copyright (C) 2018 NTT DATA
+# Copyright (c) 2018 NTT DATA
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -16,6 +16,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from horizon import tabs
 
+from masakaridashboard.api import api
+from masakaridashboard.hosts import tables as host_table
+
 
 class OverviewTab(tabs.Tab):
     name = _("Segments")
@@ -26,6 +29,30 @@ class OverviewTab(tabs.Tab):
         return {"segment": self.tab_group.kwargs['segment']}
 
 
+class HostTab(tabs.TableTab):
+    table_classes = (host_table.HostTable,)
+    name = _("Hosts")
+    slug = "host_tab"
+    template_name = "horizon/common/_detail_table.html"
+    preload = False
+
+    def get_host_data(self):
+        segment_data = self.tab_group.kwargs['segment_id']
+        if len(segment_data.split(',')) > 1:
+            segment_id = segment_data.split(',')[1]
+        else:
+            segment_id = segment_data
+
+        host_list = []
+
+        host_gen = api.get_host_list(self.request, segment_id, filters={})
+
+        for item in host_gen:
+            host_list.append(item)
+
+        return host_list
+
+
 class SegmentDetailTabs(tabs.DetailTabsGroup):
     slug = "segment_details"
-    tabs = (OverviewTab,)
+    tabs = (OverviewTab, HostTab)

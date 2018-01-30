@@ -1,0 +1,21 @@
+{% load i18n sizeformat parse_date %}
+  <div class="detail">
+        <h4>{% trans "Host Detail" %}</h4>
+        <hr class="header_rule">
+        <dl class="dl-horizontal">
+            <dt>{% trans "Name" %}</dt>
+            <dd>{{ host.name }}</dd>
+            <dt>{% trans "UUID" %}</dt>
+            <dd>{{ host.uuid }}</dd>
+            <dt>{% trans "Failover Segment" %}</dt>
+            <dd>{{ host.failover_segment_id }}</dd>
+            <dt>{% trans "Reserved" %}</dt>
+            <dd>{{ host.reserved }}</dd>
+            <dt>{% trans "On Maintenance" %}</dt>
+            <dd>{{ host.on_maintenance }}</dd>
+            <dt>{% trans "Type" %}</dt>
+            <dd>{{ host.type }}</dd>
+            <dt>{% trans "Control Attribute" %}</dt>
+            <dd>{{ host.control_attributes }}</dd>
+        </dl>
+  </div>

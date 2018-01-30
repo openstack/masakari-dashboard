@@ -117,7 +117,12 @@ class DetailView(tabs.TabbedTableView):
     @memoized.memoized_method
     def get_data(self):
         try:
-            segment_id = self.kwargs['segment_id']
+            segment_data = self.kwargs['segment_id']
+            if len(segment_data.split(',')) > 1:
+                segment_id = segment_data.split(',')[1]
+            else:
+                segment_id = segment_data
+
             segment = api.get_segment(self.request, segment_id)
         except Exception:
             msg = _('Unable to get segment "%s".') % segment_id

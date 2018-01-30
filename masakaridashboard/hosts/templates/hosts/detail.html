@@ -1,0 +1,32 @@
+<span class="masakari-wrapper detail-screen">
+{% extends 'masakaridashboard/default/base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Host Detail" %}{% endblock %}
+
+{% block page_header %}
+  {% include "horizon/common/_page_header.html" with title=_("Host Detail") %}
+{% endblock page_header %}
+{% block main %}
+{% load i18n sizeformat parse_date %}
+  <div class="detail">
+        <h4>{% trans "Host Detail" %}</h4>
+        <hr class="header_rule">
+        <dl class="dl-horizontal">
+            <dt>{% trans "UUID" %}</dt>
+            <dd>{{ host.uuid }}</dd>
+            <dt>{% trans "Name" %}</dt>
+            <dd>{{ host.name }}</dd>
+            <dt>{% trans "Reserved" %}</dt>
+            <dd>{{ host.reserved }}</dd>
+            <dt>{% trans "Type" %}</dt>
+            <dd>{{ host.type }}</dd>
+            <dt>{% trans "Control Attribute" %}</dt>
+            <dd>{{ host.control_attributes }}</dd>
+            <dt>{% trans "On Maintenance" %}</dt>
+            <dd>{{ host.on_maintenance }}</dd>
+            <dt>{% trans "Failover Segment" %}</dt>
+            <dd>{{ host.failover_segment_id }}</dd>
+        </dl>
+  </div>
+{% endblock %}
+</span>

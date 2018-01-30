@@ -12,13 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from django.conf.urls import url
+from django.utils.translation import ugettext_lazy as _
 
-from masakaridashboard.hosts import views
+from horizon import tabs
 
 
-HOST = r'^(?P<host_id>[^/]+)/%s$'
-urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
-    url(HOST % 'detail', views.DetailView.as_view(), name='detail'),
-]
+class OverviewTab(tabs.Tab):
+    name = _("Hosts")
+    slug = "hosts"
+    template_name = ("masakaridashboard/hosts/_detail_overview.html")
+
+    def get_context_data(self, request):
+        return {"host": self.tab_group.kwargs['host']}
+
+
+class HostDetailTabs(tabs.DetailTabsGroup):
+    slug = "host_details"
+    tabs = (OverviewTab,)
