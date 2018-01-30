@@ -21,8 +21,8 @@ from masakaridashboard.hosts import tables as host_table
 
 
 class OverviewTab(tabs.Tab):
-    name = _("Segments")
-    slug = "segments"
+    name = _("Segment")
+    slug = "segment"
     template_name = ("masakaridashboard/segments/_detail_overview.html")
 
     def get_context_data(self, request):

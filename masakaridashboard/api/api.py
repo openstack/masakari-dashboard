@@ -161,3 +161,23 @@ def update_host(request, host_uuid, failover_segment_id, fields_to_update):
 def get_host(request, host_id, segment_id):
     """return single host """
     return openstack_connection(request).get_host(host_id, segment_id)
+
+
+def notification_list(request, filters=None, marker='', paginate=False):
+    """return notifications list """
+    page_size = utils.get_page_size(request)
+    kwargs = get_request_param(marker, paginate, filters, page_size)
+    entities_iter = openstack_connection(request).notifications(**kwargs)
+    has_prev_data = has_more_data = False
+    if paginate:
+        entities, has_more_data, has_prev_data = pagination_process(
+            entities_iter, kwargs['limit'], page_size, marker)
+    else:
+        entities = list(entities_iter)
+
+    return entities, has_more_data, has_prev_data
+
+
+def get_notification(request, notification_id):
+    """return single notifications"""
+    return openstack_connection(request).get_notification(notification_id)

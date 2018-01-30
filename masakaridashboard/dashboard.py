@@ -23,7 +23,7 @@ from masakaridashboard.default import panel
 class MasakariDashboard(horizon.Dashboard):
     slug = "masakaridashboard"
     name = _("Instance-ha")
-    panels = ('default', 'segments', 'hosts')
+    panels = ('default', 'segments', 'hosts', 'notifications')
     default_panel = 'default'
     policy_rules = (('instance-ha', 'context_is_admin'),)
 

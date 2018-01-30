@@ -32,6 +32,7 @@ from masakaridashboard.hosts import tabs as host_tab
 class IndexView(tables.DataTableView):
     table_class = masakari_tab.HostTable
     template_name = 'masakaridashboard/hosts/index.html'
+    page_title = _("Hosts")
 
     def needs_filter_first(self, table):
         return self._needs_filter_first
