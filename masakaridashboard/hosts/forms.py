@@ -62,7 +62,7 @@ class UpdateHostForm(forms.SelfHandlingForm):
                      'on_maintenance': data['on_maintenance']}
             api.update_host(request, data['uuid'],
                             data["failover_segment_id"], attrs)
-            msg = _('Successfully updated segment.')
+            msg = _('Successfully updated host.')
             messages.success(request, msg)
         except Exception:
             msg = _('Failed to update host.')
