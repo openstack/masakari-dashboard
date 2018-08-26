@@ -16,8 +16,8 @@
 import mock
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.test.utils import override_settings
+from django.urls import reverse
 from django.utils.http import urlunquote
 from openstack_dashboard.test import helpers
 
