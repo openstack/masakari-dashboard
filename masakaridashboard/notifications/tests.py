@@ -13,8 +13,8 @@
 # limitations under the License.
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.test.utils import override_settings
+from django.urls import reverse
 from django.utils.http import urlunquote
 import mock
 
