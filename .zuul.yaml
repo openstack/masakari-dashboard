@@ -1,5 +1,7 @@
 - project:
     templates:
-      - openstack-python-jobs
-      - openstack-python35-jobs-nonvoting
       - check-requirements
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - release-notes-jobs-python3
