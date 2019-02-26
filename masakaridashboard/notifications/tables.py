@@ -15,6 +15,7 @@
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import tables
+from horizon.utils import filters
 
 
 NOTIFICATION_FILTER_CHOICES = (
@@ -28,6 +29,15 @@ NOTIFICATION_FILTER_CHOICES = (
 class NotificationFilterAction(tables.FilterAction):
     filter_type = "server"
     filter_choices = NOTIFICATION_FILTER_CHOICES
+
+
+class ProgressDetailsItem(object):
+    def __init__(self, id, action, timestamp, message):
+
+        self.id = id
+        self.action = action
+        self.timestamp = timestamp
+        self.message = message
 
 
 class NotificationsTable(tables.DataTable):
@@ -49,3 +59,16 @@ class NotificationsTable(tables.DataTable):
         name = "notifications"
         verbose_name = _("Notifications")
         table_actions = (NotificationFilterAction,)
+
+
+class NotificationProgressDetailsTable(tables.DataTable):
+
+    action = tables.Column('action', verbose_name=_('Action'))
+    timestamp = tables.Column('timestamp', verbose_name=_('Timestamp'),
+                              filters=[filters.parse_isotime])
+    message = tables.Column('message', verbose_name=_('Message'))
+    id = tables.Column('id', verbose_name=_('ID'), hidden=True)
+
+    class Meta(object):
+        name = "notification_progress_details"
+        verbose_name = _("NotificationProgressDetails")

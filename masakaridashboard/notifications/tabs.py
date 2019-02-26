@@ -14,7 +14,13 @@
 
 from django.utils.translation import ugettext_lazy as _
 
+from horizon import exceptions
 from horizon import tabs
+from masakariclient import api_versions
+from masakariclient import plugin
+
+from masakaridashboard.api import api
+from masakaridashboard.notifications import tables as notification_tab
 
 
 class OverviewTab(tabs.Tab):
@@ -26,6 +32,48 @@ class OverviewTab(tabs.Tab):
         return {"notification": self.tab_group.kwargs['notification']}
 
 
+class NotificationProgressDetailsTab(tabs.TableTab):
+    table_classes = (notification_tab.NotificationProgressDetailsTable,)
+    name = _("Progress Details")
+    slug = "notification_progress_details"
+    template_name = "masakaridashboard/notifications/_progress_detail.html"
+    preload = False
+
+    def get_notification_progress_details_data(self):
+        try:
+            id = 0
+            notification = self.tab_group.kwargs['notification']
+            notification_obj = \
+                api.get_notification_with_progress_details(
+                    self.request, notification.notification_uuid)
+            progress_detail_list = []
+            for progress_detail in notification_obj.recovery_workflow_details:
+                # Retrieve progress name from detailed name.
+                action = progress_detail['name']
+                for task in progress_detail['progress_details']:
+                    id = id + 1
+                    progress_obj = notification_tab.ProgressDetailsItem(
+                        id,
+                        action,
+                        task['timestamp'],
+                        task['message']
+                    )
+                    progress_detail_list.append(progress_obj)
+            return progress_detail_list
+        except Exception as e:
+            error_message = _("Failed to get progress details"
+                              " for notification '%(notification)', Reason: "
+                              "%(reason)") % (
+                {'notification': notification.notification_uuid, 'reason': e})
+
+            exceptions.handle(self.request, error_message)
+            return []
+
+
 class NotificationDetailTabs(tabs.DetailTabsGroup):
     slug = "notification_details"
-    tabs = (OverviewTab,)
+    if api_versions.APIVersion(
+            plugin.DEFAULT_HA_API_VERSION) >= api_versions.APIVersion("1.1"):
+        tabs = (OverviewTab, NotificationProgressDetailsTab)
+    else:
+        tabs = (OverviewTab,)
