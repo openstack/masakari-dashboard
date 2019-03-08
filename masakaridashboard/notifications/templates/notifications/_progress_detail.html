@@ -1,1 +1,13 @@
 {{ table.render }}
+
+  <div id="noturl" hidden>detail?tab=notification_details__notification_progress_details</div>
+  <script>
+          setTimeout(function(){
+              var $url= $("#noturl").text();
+              $.ajax({
+                url: $url,
+              }).done(function(res) {
+                  $("#notification_details__notification_progress_details").html(res);
+              });
+          },3000);
+  </script>
