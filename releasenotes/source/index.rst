@@ -6,4 +6,5 @@ masakaridashboard Release Notes
    :maxdepth: 1
 
    unreleased
+   train
    rocky
