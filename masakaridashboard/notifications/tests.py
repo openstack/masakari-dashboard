@@ -37,7 +37,7 @@ class NotificationTest(test.TestCase):
         self.assertTemplateUsed(res,
                                 'masakaridashboard/notifications/index.html')
         notifications_from_res = res.context['notifications_table'].data
-        self.assertItemsEqual(notifications_from_res, notifications)
+        self.assertCountEqual(notifications_from_res, notifications)
         self.assertEqual(res.status_code, 200)
         mock_notification_list.assert_called_once_with(
             mock.ANY, filters={}, marker=None, paginate=True)
@@ -74,7 +74,7 @@ class NotificationTest(test.TestCase):
             filters={}, marker=None, notifications=expected_notifications,
             url=base_url, has_more=True, has_prev=False)
         notifications = res.context['notifications_table'].data
-        self.assertItemsEqual(notifications, expected_notifications)
+        self.assertCountEqual(notifications, expected_notifications)
 
         # get second page
         expected_notifications = notification_list[size:2 * size]
@@ -85,7 +85,7 @@ class NotificationTest(test.TestCase):
             filters={}, marker=marker, notifications=expected_notifications,
             url=url, has_more=True, has_prev=True)
         notifications = res.context['notifications_table'].data
-        self.assertItemsEqual(notifications, expected_notifications)
+        self.assertCountEqual(notifications, expected_notifications)
 
         # get last page
         expected_notifications = notification_list[-size:]
@@ -95,7 +95,7 @@ class NotificationTest(test.TestCase):
             filters={}, marker=marker, notifications=expected_notifications,
             url=url, has_more=False, has_prev=True)
         notifications = res.context['notifications_table'].data
-        self.assertItemsEqual(notifications, expected_notifications)
+        self.assertCountEqual(notifications, expected_notifications)
 
     @override_settings(API_RESULT_PAGE_SIZE=1)
     def test_notifications_index_paginated_prev_page(self):
@@ -112,7 +112,7 @@ class NotificationTest(test.TestCase):
             filters={}, marker=marker, notifications=expected_notifications,
             url=url, has_more=True, has_prev=True)
         notifications = res.context['notifications_table'].data
-        self.assertItemsEqual(notifications, expected_notifications)
+        self.assertCountEqual(notifications, expected_notifications)
 
         # back to first page
         expected_notifications = notification_list[:size]
@@ -122,4 +122,4 @@ class NotificationTest(test.TestCase):
             filters={}, marker=marker, notifications=expected_notifications,
             url=url, has_more=True, has_prev=False)
         notifications = res.context['notifications_table'].data
-        self.assertItemsEqual(notifications, expected_notifications)
+        self.assertCountEqual(notifications, expected_notifications)

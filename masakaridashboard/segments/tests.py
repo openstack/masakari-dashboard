@@ -43,7 +43,7 @@ class SegmentTest(test.TestCase):
             filters={}, marker=None, paginate=True,
             request=helpers.IsHttpRequest())
         segments = res.context['failover_segment_table'].data
-        self.assertItemsEqual(segments, self.masakari_segment.list())
+        self.assertCountEqual(segments, self.masakari_segment.list())
 
     def test_create_get(self):
         res = self.client.get(CREATE_URL)
@@ -101,7 +101,7 @@ class SegmentTest(test.TestCase):
                                                   url=base_url, has_more=True,
                                                   has_prev=False)
         segments = res.context['failover_segment_table'].data
-        self.assertItemsEqual(segments, expected_segments)
+        self.assertCountEqual(segments, expected_segments)
 
         # get second page
         expected_segments = segment_list[size:2 * size]
@@ -113,7 +113,7 @@ class SegmentTest(test.TestCase):
                                                   url=url, has_more=True,
                                                   has_prev=True)
         segments = res.context['failover_segment_table'].data
-        self.assertItemsEqual(segments, expected_segments)
+        self.assertCountEqual(segments, expected_segments)
 
         # get last page
         expected_segments = segment_list[-size:]
@@ -124,7 +124,7 @@ class SegmentTest(test.TestCase):
                                                   url=url, has_more=False,
                                                   has_prev=True)
         segments = res.context['failover_segment_table'].data
-        self.assertItemsEqual(segments, expected_segments)
+        self.assertCountEqual(segments, expected_segments)
 
     @override_settings(API_RESULT_PAGE_SIZE=1)
     def test_segments_index_paginated_prev_page(self):
@@ -142,7 +142,7 @@ class SegmentTest(test.TestCase):
                                                   url=url, has_more=True,
                                                   has_prev=True)
         segments = res.context['failover_segment_table'].data
-        self.assertItemsEqual(segments, expected_segments)
+        self.assertCountEqual(segments, expected_segments)
 
         # back to first page
         expected_segments = segment_list[:size]
@@ -152,7 +152,7 @@ class SegmentTest(test.TestCase):
             filters={}, marker=marker, segments=expected_segments,
             url=url, has_more=True, has_prev=False)
         segments = res.context['failover_segment_table'].data
-        self.assertItemsEqual(segments, expected_segments)
+        self.assertCountEqual(segments, expected_segments)
 
     def test_delete_ok(self):
 
