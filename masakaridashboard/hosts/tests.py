@@ -13,11 +13,11 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from unittest import mock
+
 from django.urls import reverse
-import mock
 
 from masakaridashboard.test import helpers as test
-
 
 INDEX_URL = reverse('horizon:masakaridashboard:hosts:index')
 
