@@ -97,7 +97,7 @@ class HostTest(test.TestCase):
 
     def test_detail(self):
         host = self.masakari_host.list()[0]
-        id_to_update = host.uuid+','+host.failover_segment_id
+        id_to_update = host.uuid + ',' + host.failover_segment_id
         detail_url = reverse('horizon:masakaridashboard:hosts:detail',
                              args=[id_to_update])
         with mock.patch('masakaridashboard.api.api.get_host',
@@ -112,7 +112,7 @@ class HostTest(test.TestCase):
     def test_update(self):
         host_to_update = self.masakari_host.list()[0]
         id_to_update = (
-            host_to_update.uuid+','+host_to_update.failover_segment_id)
+            host_to_update.uuid + ',' + host_to_update.failover_segment_id)
         update_url = reverse('horizon:masakaridashboard:hosts:update',
                              args=[id_to_update])
         host_to_update.control_attributes = 'fake'

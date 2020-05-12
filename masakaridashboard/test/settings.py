@@ -23,9 +23,9 @@ HORIZON_CONFIG.pop('dashboards', None)
 HORIZON_CONFIG.pop('default_dashboard', None)
 
 # Update the dashboards with masakaridashboard
-from masakaridashboard.local import enabled
-import openstack_dashboard.enabled
-from openstack_dashboard.utils import settings
+from masakaridashboard.local import enabled  # noqa
+import openstack_dashboard.enabled  # noqa
+from openstack_dashboard.utils import settings  # noqa
 
 settings.update_dashboards(
     [

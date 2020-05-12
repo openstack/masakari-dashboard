@@ -59,7 +59,7 @@ def data(TEST):
     TEST.hypervisors = test_data_utils.TestDataContainer()
 
     hypervisor1 = Hypervisor(
-        HypervisorManager, {'id':  '1', 'hypervisor_hostname': "test"})
+        HypervisorManager, {'id': '1', 'hypervisor_hostname': "test"})
 
     TEST.hypervisors.add(hypervisor1)
 

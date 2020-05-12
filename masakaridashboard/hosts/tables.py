@@ -71,7 +71,7 @@ class UpdateHost(tables.LinkAction):
     classes = ("ajax-modal",)
 
     def get_link_url(self, datum):
-        host_id = datum.uuid+','+datum.failover_segment_id
+        host_id = datum.uuid + ',' + datum.failover_segment_id
         url = "horizon:masakaridashboard:hosts:update"
         return reverse(url, args=[host_id])
 
