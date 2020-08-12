@@ -34,6 +34,8 @@ MICROVERSION_FEATURES = {"recovery_workflow_details": ["1.1"]}
 
 @memoized.memoized
 def openstack_connection(request, version=None):
+    interface = getattr(settings, 'OPENSTACK_ENDPOINT_TYPE', 'publicURL')
+
     auth = token.Token(
         auth_url=getattr(settings, 'OPENSTACK_KEYSTONE_URL'),
         token=request.user.token.id,
@@ -41,6 +43,7 @@ def openstack_connection(request, version=None):
         project_id=request.user.tenant_id)
     session = ks_session.Session(auth=auth)
     conn = connection.Connection(session=session,
+                                 interface=interface,
                                  ha_api_version=version)
 
     return conn.instance_ha
