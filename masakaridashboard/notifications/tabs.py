@@ -60,12 +60,10 @@ class NotificationProgressDetailsTab(tabs.TableTab):
                     )
                     progress_detail_list.append(progress_obj)
             return progress_detail_list
-        except Exception as e:
-            error_message = _("Failed to get progress details"
-                              " for notification '%(notification)', Reason: "
-                              "%(reason)") % (
-                {'notification': notification.notification_uuid, 'reason': e})
-
+        except Exception:
+            error_message = (_("Failed to get progress details for "
+                               "notification '%s'.")
+                             % notification.notification_uuid)
             exceptions.handle(self.request, error_message)
             return []
 
