@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Fixes an issue where the dashboard fails to load if communication with the
+    API requires a custom CA certificate.
