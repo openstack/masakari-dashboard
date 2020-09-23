@@ -41,7 +41,8 @@ def openstack_connection(request, version=None):
         token=request.user.token.id,
         project_name=request.user.project_name,
         project_id=request.user.tenant_id)
-    session = ks_session.Session(auth=auth)
+    cacert = getattr(settings, 'OPENSTACK_SSL_CACERT')
+    session = ks_session.Session(auth=auth, verify=cacert or True)
     conn = connection.Connection(session=session,
                                  interface=interface,
                                  ha_api_version=version)
