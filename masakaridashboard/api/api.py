@@ -34,6 +34,8 @@ MICROVERSION_FEATURES = {"recovery_workflow_details": ["1.1"]}
 
 @memoized.memoized
 def openstack_connection(request, version=None):
+    interface = getattr(settings, 'OPENSTACK_ENDPOINT_TYPE', 'publicURL')
+
     auth = token.Token(
         auth_url=getattr(settings, 'OPENSTACK_KEYSTONE_URL'),
         token=request.user.token.id,
@@ -42,6 +44,7 @@ def openstack_connection(request, version=None):
     cacert = getattr(settings, 'OPENSTACK_SSL_CACERT')
     session = ks_session.Session(auth=auth, verify=cacert or True)
     conn = connection.Connection(session=session,
+                                 interface=interface,
                                  ha_api_version=version)
 
     return conn.instance_ha
