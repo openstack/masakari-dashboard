@@ -5,8 +5,8 @@ Masakari dashboard
 Horizon plugin for masakari
 
 * Free software: Apache license
-* Source: https://opendev.org/openstack/masakari-dashboard/
-* Bugs: https://bugs.launchpad.net/masakari
+* Source: https://opendev.org/openstack/masakari-dashboard
+* Bugs: https://bugs.launchpad.net/masakari-dashboard
 
 Features
 --------
