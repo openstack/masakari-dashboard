@@ -56,8 +56,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Masakari dashboard Release Notes'
-copyright = u'2017, OpenStack Foundation'
+project = 'Masakari dashboard Release Notes'
+copyright = '2017, OpenStack Foundation'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -213,8 +213,8 @@ latex_elements = {
 latex_documents = [
     ('index',
      'Masakari dashboardReleaseNotes.tex',
-     u'Masakari dashboard Release Notes Documentation',
-     u'Masakari dashboard Developers',
+     'Masakari dashboard Release Notes Documentation',
+     'Masakari dashboard Developers',
      'manual'),
 ]
 
@@ -245,8 +245,8 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'masakaridashboardreleasenotes',
-     u'Masakari dashboard Release Notes Documentation',
-     [u'Masakari dashboard Developers'], 1)
+     'Masakari dashboard Release Notes Documentation',
+     ['Masakari dashboard Developers'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -260,8 +260,8 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     ('index', 'Masakari dashboardReleaseNotes',
-     u'Masakari dashboard Release Notes Documentation',
-     u'Masakari dashboard Developers', 'Masakari dashboardReleaseNotes',
+     'Masakari dashboard Release Notes Documentation',
+     'Masakari dashboard Developers', 'Masakari dashboardReleaseNotes',
      'One line description of project.',
      'Miscellaneous'),
 ]
