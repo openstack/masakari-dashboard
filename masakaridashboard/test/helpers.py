@@ -13,6 +13,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from unittest import mock
+
 from openstack_dashboard.test import helpers
 
 from masakaridashboard.test.test_data import utils
@@ -25,4 +27,11 @@ class MasakariTestsMixin(object):
 
 
 class TestCase(MasakariTestsMixin, helpers.TestCase):
-    pass
+
+    def setUp(self):
+        allowed_patch = mock.patch(
+            "masakaridashboard.dashboard.MasakariDashboard.allowed",
+            return_value=True)
+        allowed_patch.start()
+        self.addCleanup(mock.patch.stopall)
+        super().setUp()
