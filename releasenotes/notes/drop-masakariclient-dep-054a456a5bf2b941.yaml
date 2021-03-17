@@ -1,0 +1,4 @@
+---
+other:
+  - |
+    Masakari Dashboard no longer depends on the Masakari Client (OSC plugin).

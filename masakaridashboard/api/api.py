@@ -22,14 +22,10 @@ from horizon.utils import functions as utils
 from horizon.utils import memoized
 from keystoneauth1.identity.generic import token
 from keystoneauth1 import session as ks_session
-from masakariclient import api_versions
-from masakariclient import plugin
 from openstack import connection
 from openstack_dashboard.api import nova as nova_api
 
 from masakaridashboard.handle_errors import handle_errors
-
-MICROVERSION_FEATURES = {"recovery_workflow_details": ["1.1"]}
 
 
 @memoized.memoized
@@ -192,46 +188,7 @@ def get_notification(request, notification_id):
     return openstack_connection(request).get_notification(notification_id)
 
 
-def get_requested_versions(features):
-    if not features:
-        return None
-    # Convert a single feature string into a list for backward compatibility.
-    if isinstance(features, str):
-        features = [features]
-    service_features = MICROVERSION_FEATURES
-    feature_versions = set(service_features[features[0]])
-    for feature in features[1:]:
-        feature_versions &= set(service_features[feature])
-    if not feature_versions:
-        return None
-    # Sort version candidates from larger versins
-    feature_versions = sorted(feature_versions, reverse=True,
-                              key=lambda v: [int(i) for i in v.split('.')])
-    return feature_versions
-
-
-def get_microversion_for_features(features, wrapper_class, min_ver, max_ver):
-    """Retrieves that highest known functional microversion for features"""
-    feature_versions = get_requested_versions(features)
-    if not feature_versions:
-        return None
-    for version in feature_versions:
-        microversion = wrapper_class(version)
-        if microversion.matches(min_ver, max_ver):
-            return microversion
-    return None
-
-
-@memoized.memoized
-def get_microversion(features):
-    min_ver = api_versions.APIVersion(plugin.SUPPORTED_VERSIONS[1])
-    max_ver = api_versions.APIVersion(plugin.SUPPORTED_VERSIONS[-1])
-    return (get_microversion_for_features(
-        features, api_versions.APIVersion, min_ver, max_ver))
-
-
 def get_notification_with_progress_details(request, notification_id):
-    microversion = get_microversion("recovery_workflow_details")
     return openstack_connection(
-        request, version=microversion.get_string()).get_notification(
+        request, version='1.1').get_notification(
         notification_id)
