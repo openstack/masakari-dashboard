@@ -50,6 +50,11 @@ class CreateSegmentForm(forms.SelfHandlingForm):
     description = forms.CharField(
         label=_("Description"), widget=forms.Textarea(
             attrs={'rows': 4}), required=False)
+    is_enabled = forms.BooleanField(
+        label=_("Enabled"),
+        required=False,
+        initial=True,
+    )
 
     def __init__(self, *args, **kwargs):
         super(CreateSegmentForm, self).__init__(*args, **kwargs)
@@ -91,12 +96,19 @@ class UpdateForm(forms.SelfHandlingForm):
             attrs={'width': "100%", 'cols': "80", 'rows': "5", }),
         required=False
     )
+    is_enabled = forms.BooleanField(
+        label=_("Enabled"),
+        required=False,
+    )
 
     def handle(self, request, data):
         try:
-            fields_to_update = {'name': data['name'],
-                                'recovery_method': data['recovery_method'],
-                                'description': data['description']}
+            fields_to_update = {
+                'name': data['name'],
+                'recovery_method': data['recovery_method'],
+                'description': data['description'],
+                'is_enabled': data['is_enabled'],
+            }
             api.segment_update(request, data['uuid'], fields_to_update)
             msg = _('Successfully updated segment.')
             messages.success(request, msg)

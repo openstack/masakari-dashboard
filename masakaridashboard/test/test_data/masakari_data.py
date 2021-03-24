@@ -32,15 +32,30 @@ def data(TEST):
 
     TEST.masakari_segment = test_data_utils.TestDataContainer()
 
-    segment1 = segment.Segment(uuid=uuidsentinel.segment1, name='test',
-                               recovery_method='auto',
-                               service_type='service', description='demo')
-    segment2 = segment.Segment(uuid=uuidsentinel.segment2,
-                               name='test2', recovery_method='auto',
-                               service_type='service', description='demo')
-    segment3 = segment.Segment(uuid=uuidsentinel.segment3, name='test3',
-                               recovery_method='auto',
-                               service_type='service', description='demo')
+    segment1 = segment.Segment(
+        uuid=uuidsentinel.segment1,
+        name='test',
+        recovery_method='auto',
+        service_type='service',
+        description='demo',
+        is_enabled=True,
+    )
+    segment2 = segment.Segment(
+        uuid=uuidsentinel.segment2,
+        name='test2',
+        recovery_method='auto',
+        service_type='service',
+        description='demo',
+        is_enabled=False,
+    )
+    segment3 = segment.Segment(
+        uuid=uuidsentinel.segment3,
+        name='test3',
+        recovery_method='auto',
+        service_type='service',
+        description='demo',
+        is_enabled=True,
+    )
 
     TEST.masakari_segment.add(segment1)
     TEST.masakari_segment.add(segment2)

@@ -171,10 +171,13 @@ class UpdateView(forms.ModalFormView):
     def get_initial(self, **kwargs):
         segment = self.get_object()
 
-        return {'uuid': self.kwargs['segment_id'],
-                'name': segment.name,
-                'recovery_method': segment.recovery_method,
-                'description': segment.description}
+        return {
+            'uuid': self.kwargs['segment_id'],
+            'name': segment.name,
+            'recovery_method': segment.recovery_method,
+            'description': segment.description,
+            'is_enabled': segment.is_enabled,
+        }
 
 
 class AddHostView(forms.ModalFormView):

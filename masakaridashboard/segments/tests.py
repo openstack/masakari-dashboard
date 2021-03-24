@@ -55,7 +55,8 @@ class SegmentTest(test.TestCase):
             'name': segment.name,
             'recovery_method': segment.recovery_method,
             'service_type': segment.service_type,
-            'description': segment.description
+            'description': segment.description,
+            'is_enabled': segment.is_enabled,
         }
         with mock.patch('masakaridashboard.api.api.segment_create',
                         return_value=segment) as mocked_create:
@@ -199,7 +200,9 @@ class SegmentTest(test.TestCase):
             'uuid': segment_obj.uuid,
             'name': segment_obj.name,
             'recovery_method': segment_obj.recovery_method,
-            'description': segment_obj.description}
+            'description': segment_obj.description,
+            'is_enabled': segment_obj.is_enabled,
+        }
 
         with mock.patch(
                 'masakaridashboard.api.api.get_segment',
@@ -213,7 +216,9 @@ class SegmentTest(test.TestCase):
         data_to_update = {
             'name': segment_obj.name,
             'recovery_method': segment_obj.recovery_method,
-            'description': segment_obj.description}
+            'description': segment_obj.description,
+            'is_enabled': segment_obj.is_enabled,
+        }
 
         mocked_update.assert_called_once_with(
             helpers.IsHttpRequest(),

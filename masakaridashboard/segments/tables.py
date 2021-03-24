@@ -13,6 +13,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from django.template import defaultfilters as filters
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext_lazy
@@ -45,6 +46,7 @@ class CreateSegment(tables.LinkAction):
 SEGMENT_FILTER_CHOICES = (
     ('recovery_method', _("Recovery Method ="), True),
     ('service_type', _("Service Type ="), True),
+    ('is_enabled', _("Enabled ="), True, _('e.g. Yes/No')),
 )
 
 
@@ -100,6 +102,9 @@ class FailoverSegmentTable(tables.DataTable):
     description = tables.WrappingColumn(
         'description', verbose_name=_("Description"),
         truncate=40)
+    is_enabled = tables.Column('is_enabled', verbose_name=_('Enabled'),
+                               status=True,
+                               filters=(filters.yesno, filters.capfirst))
 
     def get_object_id(self, datum):
         return datum.uuid
