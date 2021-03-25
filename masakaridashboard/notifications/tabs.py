@@ -16,8 +16,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from horizon import exceptions
 from horizon import tabs
-from masakariclient import api_versions
-from masakariclient import plugin
 
 from masakaridashboard.api import api
 from masakaridashboard.notifications import tables as notification_tab
@@ -70,8 +68,4 @@ class NotificationProgressDetailsTab(tabs.TableTab):
 
 class NotificationDetailTabs(tabs.DetailTabsGroup):
     slug = "notification_details"
-    if api_versions.APIVersion(
-            plugin.DEFAULT_HA_API_VERSION) >= api_versions.APIVersion("1.1"):
-        tabs = (OverviewTab, NotificationProgressDetailsTab)
-    else:
-        tabs = (OverviewTab,)
+    tabs = (OverviewTab, NotificationProgressDetailsTab)
