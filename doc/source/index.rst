@@ -63,3 +63,13 @@ To run horizon with the newly enabled Masakari dashboard plugin run::
 
 to have the application start on port 8080 and the horizon dashboard will be
 available in your browser at http://localhost:8080/
+
+For Contributors
+================
+
+* If you are a new contributor to Masakari Dashboard please refer: :doc:`contributor/contributing`
+
+  .. toctree::
+     :hidden:
+
+     contributor/contributing
