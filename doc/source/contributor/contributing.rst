@@ -11,7 +11,7 @@ with masakari-dashboard.
 
 Communication
 ~~~~~~~~~~~~~
-* IRC channel #openstack-masakari at FreeNode
+* IRC channel #openstack-masakari at OFTC
 * Mailing list (prefix subjects with ``[masakari]`` for faster responses)
   http://lists.openstack.org/cgi-bin/mailman/listinfo/openstack-discuss
 
