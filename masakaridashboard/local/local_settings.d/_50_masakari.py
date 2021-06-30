@@ -16,4 +16,4 @@
 from openstack_dashboard.settings import POLICY_FILES
 
 
-POLICY_FILES.update({'instance-ha': 'masakari_policy.json'})
+POLICY_FILES.update({'instance-ha': 'masakari_policy.yaml'})

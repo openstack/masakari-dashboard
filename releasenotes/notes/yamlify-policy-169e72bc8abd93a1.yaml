@@ -1,0 +1,7 @@
+---
+upgrade:
+  - |
+    Since Victoria, release JSON policy files are obsolete. In Masakari
+    they were deprecated in Wallaby. The old JSON policy file
+    is a valid YAML, but at least changing the file extension is needed.
+    The JSON file is no longer used by default nor distributed.
