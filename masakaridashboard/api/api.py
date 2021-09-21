@@ -46,8 +46,8 @@ def openstack_connection(request, version=None):
     return conn.instance_ha
 
 
-def get_hypervisor_list(request):
-    return nova_api.hypervisor_list(request)
+def get_compute_service_list(request):
+    return nova_api.service_list(request, binary="nova-compute")
 
 
 @handle_errors(_("Unable to retrieve segments"), [])
