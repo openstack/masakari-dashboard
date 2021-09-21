@@ -160,19 +160,22 @@ class AddHostForm(forms.SelfHandlingForm):
     def __init__(self, *args, **kwargs):
         super(AddHostForm, self).__init__(*args, **kwargs)
 
-        # Populate hypervisor name choices
-        hypervisor_list = kwargs.get('initial', {}).get("hypervisor_list", [])
-        hypervisor_name_list = []
-        for hypervisor in hypervisor_list:
-            hypervisor_name_list.append(
-                (hypervisor.hypervisor_hostname, '%(name)s (%(id)s)'
-                 % {"name": hypervisor.hypervisor_hostname,
-                    "id": hypervisor.id}))
-        if hypervisor_name_list:
-            hypervisor_name_list.insert(0, ("", _("Select a host")))
+        # Populate candidate name choices
+        available_host_list = kwargs.get('initial', {}).get(
+            "available_host_list", [])
+        host_candidate_list = []
+        # NOTE(pas-ha) available_host_list contains
+        # novaclient v2 Service objects
+        for service in available_host_list:
+            host_candidate_list.append(
+                (service.host, '%(name)s (%(id)s)'
+                 % {"name": service.host,
+                    "id": service.id}))
+        if host_candidate_list:
+            host_candidate_list.insert(0, ("", _("Select a host")))
         else:
-            hypervisor_name_list.insert(0, ("", _("No host available")))
-        self.fields['name'].choices = hypervisor_name_list
+            host_candidate_list.insert(0, ("", _("No host available")))
+        self.fields['name'].choices = host_candidate_list
 
     def handle(self, request, data):
         try:
