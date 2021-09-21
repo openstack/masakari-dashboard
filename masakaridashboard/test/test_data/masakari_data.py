@@ -22,8 +22,8 @@ from openstack.instance_ha.v1 import segment
 from openstack_dashboard.test.test_data import utils as test_data_utils
 
 from masakaridashboard.test import uuidsentinel
-from novaclient.v2.hypervisors import Hypervisor
-from novaclient.v2.hypervisors import HypervisorManager
+from novaclient.v2.services import Service
+from novaclient.v2.services import ServiceManager
 
 NOW = timeutils.utcnow().replace(microsecond=0)
 
@@ -56,12 +56,15 @@ def data(TEST):
 
     TEST.masakari_host.add(host1)
 
-    TEST.hypervisors = test_data_utils.TestDataContainer()
+    TEST.compute_services = test_data_utils.TestDataContainer()
 
-    hypervisor1 = Hypervisor(
-        HypervisorManager, {'id':  '1', 'hypervisor_hostname': "test"})
+    service1 = Service(
+        ServiceManager, {
+            "id": 1, "host": "test",
+        }
+    )
 
-    TEST.hypervisors.add(hypervisor1)
+    TEST.compute_services.add(service1)
 
     TEST.masakari_notification = test_data_utils.TestDataContainer()
     notification1 = notification.Notification(

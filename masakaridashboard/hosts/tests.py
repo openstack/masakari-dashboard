@@ -40,7 +40,7 @@ class HostTest(test.TestCase):
     def test_create_post(self):
         segment = self.masakari_segment.list()
         host = self.masakari_host.list()[0]
-        hypervisors = self.hypervisors.list()
+        compute_services = self.compute_services.list()
         create_url = reverse('horizon:masakaridashboard:segments:addhost',
                              args=[segment[0].uuid])
         form_data = {
@@ -56,8 +56,8 @@ class HostTest(test.TestCase):
                         return_value=segment), mock.patch(
                 'masakaridashboard.api.api.get_host_list',
                 return_value=[]), mock.patch(
-                'masakaridashboard.api.api.get_hypervisor_list',
-                return_value=hypervisors), mock.patch(
+                'masakaridashboard.api.api.get_compute_service_list',
+                return_value=compute_services), mock.patch(
                 'masakaridashboard.api.api.get_segment',
                 return_value=segment[0]), mock.patch(
             'masakaridashboard.api.api.create_host',

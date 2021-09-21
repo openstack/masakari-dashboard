@@ -1,0 +1,7 @@
+---
+fixes:
+  - |
+    Fixed an issue with retreiving candidates for hosts.
+    Now they are retreived using compute service list API,
+    the same as used during host validation in Masakari itself.
+    `LP#1944679 <https://launchpad.net/bugs/1944679>`__
