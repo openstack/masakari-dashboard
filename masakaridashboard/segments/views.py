@@ -199,10 +199,10 @@ class AddHostView(forms.ModalFormView):
                 host_list.append(item.name)
         try:
             available_host_list = []
-            hypervisor_list = api.get_hypervisor_list(self.request)
-            for hypervisor in hypervisor_list:
-                if hypervisor.hypervisor_hostname not in host_list:
-                    available_host_list.append(hypervisor)
+            service_list = api.get_compute_service_list(self.request)
+            for service in service_list:
+                if service.host not in host_list:
+                    available_host_list.append(service)
             return available_host_list
         except Exception:
             msg = _('Unable to retrieve host list.')
@@ -219,12 +219,12 @@ class AddHostView(forms.ModalFormView):
         return context
 
     def get_initial(self):
-        hypervisor_list = self.get_object()
+        available_host_list = self.get_object()
         segment_name = api.get_segment(
             self.request, self.kwargs['segment_id']).name
         initial = {'segment_id': self.kwargs['segment_id'],
                    'segment_name': segment_name,
-                   'hypervisor_list': hypervisor_list,
+                   'available_host_list': available_host_list,
                    'reserved': self.kwargs.get('reserved'),
                    'type': self.kwargs.get('service_type'),
                    'control_attributes': self.kwargs.get('control_attributes'),
