@@ -13,17 +13,17 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from django.conf.urls import url
+from django.urls import re_path
 
 from masakaridashboard.segments import views
 
 
 SEGMENT = r'^(?P<segment_id>[^/]+)/%s$'
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
-    url(r'^create_segment$', views.CreateSegmentView.as_view(),
-        name='create_segment'),
-    url(SEGMENT % 'detail', views.DetailView.as_view(), name='detail'),
-    url(SEGMENT % 'update', views.UpdateView.as_view(), name='update'),
-    url(SEGMENT % 'addhost', views.AddHostView.as_view(), name='addhost'),
+    re_path(r'^$', views.IndexView.as_view(), name='index'),
+    re_path(r'^create_segment$', views.CreateSegmentView.as_view(),
+            name='create_segment'),
+    re_path(SEGMENT % 'detail', views.DetailView.as_view(), name='detail'),
+    re_path(SEGMENT % 'update', views.UpdateView.as_view(), name='update'),
+    re_path(SEGMENT % 'addhost', views.AddHostView.as_view(), name='addhost'),
 ]

@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from django.conf.urls import url
+from django.urls import re_path
 
 from masakaridashboard.hosts import views
 
 
 HOST = r'^(?P<host_id>[^/]+)/%s$'
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
-    url(HOST % 'detail', views.DetailView.as_view(), name='detail'),
-    url(HOST % 'update', views.UpdateView.as_view(), name='update'),
+    re_path(r'^$', views.IndexView.as_view(), name='index'),
+    re_path(HOST % 'detail', views.DetailView.as_view(), name='detail'),
+    re_path(HOST % 'update', views.UpdateView.as_view(), name='update'),
 ]
