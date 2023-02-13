@@ -19,6 +19,7 @@ from oslo_utils import timeutils
 from openstack.instance_ha.v1 import host
 from openstack.instance_ha.v1 import notification
 from openstack.instance_ha.v1 import segment
+from openstack.instance_ha.v1 import vmove
 from openstack_dashboard.test.test_data import utils as test_data_utils
 
 from masakaridashboard.test import uuidsentinel
@@ -97,3 +98,18 @@ def data(TEST):
     TEST.masakari_notification.add(notification1)
     TEST.masakari_notification.add(notification2)
     TEST.masakari_notification.add(notification3)
+    TEST.masakari_vmove = test_data_utils.TestDataContainer()
+
+    vmove1 = vmove.VMove(
+        uuid=uuidsentinel.vmove1,
+        notification_id=uuidsentinel.notification1,
+        server_id=uuidsentinel.server1,
+        server_name="vm",
+        source_host='host1',
+        dest_host='host2',
+        start_time=(NOW - datetime.timedelta(seconds=3)),
+        end_time=(NOW - datetime.timedelta(seconds=1)),
+        status='succeeded',
+        type='evacuation')
+
+    TEST.masakari_vmove.add(vmove1)

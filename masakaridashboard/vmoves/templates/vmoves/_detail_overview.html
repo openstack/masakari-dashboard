@@ -1,0 +1,25 @@
+{% load i18n sizeformat parse_date %}
+  <div class="detail">
+        <h4>{% trans "VMove Detail" %}</h4>
+        <hr class="header_rule">
+        <dl class="dl-horizontal">
+            <dt>{% trans "UUID" %}</dt>
+            <dd>{{ vmove.uuid }}</dd>
+            <dt>{% trans "Server ID" %}</dt>
+            <dd>{{ vmove.server_id }}</dd>
+            <dt>{% trans "Server Name" %}</dt>
+            <dd>{{ vmove.server_name }}</dd>
+            <dt>{% trans "Type" %}</dt>
+            <dd>{{ vmove.type }}</dd>
+            <dt>{% trans "Source Host" %}</dt>
+            <dd>{{ vmove.source_host }}</dd>
+            <dt>{% trans "Dest Host" %}</dt>
+            <dd>{{ vmove.dest_host }}</dd>
+            <dt>{% trans "Start Time" %}</dt>
+            <dd>{{ vmove.start_time }}</dd>
+            <dt>{% trans "End Time" %}</dt>
+            <dd>{{ vmove.end_time }}</dd>
+            <dt>{% trans "Status" %}</dt>
+            <dd>{{ vmove.status }}</dd>
+        </dl>
+  </div>

@@ -192,3 +192,16 @@ def get_notification_with_progress_details(request, notification_id):
     return openstack_connection(
         request, version='1.1').get_notification(
         notification_id)
+
+
+@handle_errors(_("Unable to get vmoves list"), [])
+def get_vmoves_list(request, notification_id, filters):
+    """return vmoves list """
+    return openstack_connection(
+        request, version='1.3').vmoves(notification_id, **filters)
+
+
+def get_vmove(request, notification_id, vmove_id):
+    """return single vmove"""
+    return openstack_connection(
+        request, version='1.3').get_vmove(vmove_id, notification_id)

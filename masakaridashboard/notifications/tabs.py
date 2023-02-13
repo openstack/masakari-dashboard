@@ -19,6 +19,7 @@ from horizon import tabs
 
 from masakaridashboard.api import api
 from masakaridashboard.notifications import tables as notification_tab
+from masakaridashboard.vmoves import tables as vmove_table
 
 
 class OverviewTab(tabs.Tab):
@@ -66,6 +67,29 @@ class NotificationProgressDetailsTab(tabs.TableTab):
             return []
 
 
+class VMoveTab(tabs.TableTab):
+    table_classes = (vmove_table.VMoveTable,)
+    name = _("VMoves")
+    slug = "vmove_tab"
+    template_name = "horizon/common/_detail_table.html"
+    preload = False
+
+    def get_vmove_data(self):
+        vmove_list = []
+        notification_type = self.tab_group.kwargs['type']
+        if notification_type != "COMPUTE_HOST":
+            return vmove_list
+
+        notification_id = self.tab_group.kwargs['notification_uuid']
+        vmove_gen = api.get_vmoves_list(
+            self.request, notification_id, filters={})
+
+        for item in vmove_gen:
+            vmove_list.append(item)
+
+        return vmove_list
+
+
 class NotificationDetailTabs(tabs.DetailTabsGroup):
     slug = "notification_details"
-    tabs = (OverviewTab, NotificationProgressDetailsTab)
+    tabs = (OverviewTab, NotificationProgressDetailsTab, VMoveTab)

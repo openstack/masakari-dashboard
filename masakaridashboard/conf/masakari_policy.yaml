@@ -7,3 +7,4 @@ os_masakari_api:extensions: rule:admin_api
 os_masakari_api:segments: rule:admin_api
 os_masakari_api:os-hosts: rule:admin_api
 os_masakari_api:notifications: rule:admin_api
+os_masakari_api:vmoves: rule:admin_api
