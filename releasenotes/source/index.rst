@@ -7,6 +7,7 @@ masakaridashboard Release Notes
 
    unreleased
    2023.2
+   2023.1
    zed
    yoga
    xena
