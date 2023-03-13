@@ -13,11 +13,11 @@
 # limitations under the License.
 
 from unittest import mock
+from urllib import parse
 
 from django.conf import settings
 from django.test.utils import override_settings
 from django.urls import reverse
-from django.utils.http import urlunquote
 
 from masakaridashboard.notifications import tables as notification_tab
 from masakaridashboard.test import helpers as test
@@ -49,7 +49,7 @@ class NotificationTest(test.TestCase):
                 'masakaridashboard.api.api.notification_list',
                 return_value=[notifications,
                               has_more, has_prev]) as mock_notification_list:
-            res = self.client.get(urlunquote(url))
+            res = self.client.get(parse.unquote(url))
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res,
                                 'masakaridashboard/notifications/index.html')

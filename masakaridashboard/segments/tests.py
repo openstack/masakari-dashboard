@@ -14,11 +14,11 @@
 #    under the License.
 
 from unittest import mock
+from urllib import parse
 
 from django.conf import settings
 from django.test.utils import override_settings
 from django.urls import reverse
-from django.utils.http import urlunquote
 from openstack_dashboard.test import helpers
 
 from masakaridashboard.segments import tables as segment_table
@@ -77,7 +77,7 @@ class SegmentTest(test.TestCase):
                 'masakaridashboard.api.api.get_segment_list',
                 return_value=[segments,
                               has_more, has_prev]) as mock_get_segment_list:
-            res = self.client.get(urlunquote(url))
+            res = self.client.get(parse.unquote(url))
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, 'masakaridashboard/segments/index.html')
         mock_get_segment_list.assert_called_once_with(
