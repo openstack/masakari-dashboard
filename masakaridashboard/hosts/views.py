@@ -74,9 +74,6 @@ class DetailView(tabs.TabbedTableView):
 
     @memoized.memoized_method
     def get_data(self):
-        row_data = self.kwargs['host_id'].split(',')
-        segment_id = row_data[1]
-        host_id = row_data[0]
         try:
             row_data = self.kwargs['host_id'].split(',')
             segment_id = row_data[1]
