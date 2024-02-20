@@ -33,7 +33,7 @@ def openstack_connection(request, version=None):
     interface = getattr(settings, 'OPENSTACK_ENDPOINT_TYPE', 'publicURL')
 
     auth = token.Token(
-        auth_url=getattr(settings, 'OPENSTACK_KEYSTONE_URL'),
+        auth_url=request.user.endpoint,
         token=request.user.token.id,
         project_name=request.user.project_name,
         project_id=request.user.tenant_id)
