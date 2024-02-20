@@ -35,7 +35,7 @@ class IndexView(tables.DataTableView):
         return self._needs_filter_first
 
     def get_data(self):
-        notifications = api.notification_list(self.request)
+        notifications = api.get_notification_list(self.request)
         vmove_list = []
         filters = self.get_filters()
         self._needs_filter_first = True
@@ -48,6 +48,8 @@ class IndexView(tables.DataTableView):
             return vmove_list
 
         for notification in notifications:
+            if notification.type != "COMPUTE_HOST":
+                continue
             vmove_gen = api.get_vmoves_list(
                 self.request, notification.notification_uuid, filters)
             for item in vmove_gen:

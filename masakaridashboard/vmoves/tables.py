@@ -18,7 +18,7 @@ from horizon import tables
 
 
 VMOVE_FILTER_CHOICES = (
-    ('notification_id', _("Notification UUId ="), True),
+    ('notification_uuid', _("Notification UUId ="), True),
     ('type', _("Type ="), True),
     ('status', _("Status ="), True),
 )
@@ -53,7 +53,7 @@ class VMoveTable(tables.DataTable):
         'status', verbose_name=_("Status"))
 
     def get_object_id(self, datum):
-        return datum.uuid + ',' + datum.notification_id
+        return datum.notification_id + ',' + datum.uuid
 
     class Meta(object):
         name = "vmove"

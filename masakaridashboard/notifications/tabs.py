@@ -75,14 +75,13 @@ class VMoveTab(tabs.TableTab):
     preload = False
 
     def get_vmove_data(self):
-        vmove_list = []
-        notification_type = self.tab_group.kwargs['type']
-        if notification_type != "COMPUTE_HOST":
-            return vmove_list
+        notification = self.tab_group.kwargs['notification']
+        if notification.type != "COMPUTE_HOST":
+            return []
 
-        notification_id = self.tab_group.kwargs['notification_uuid']
+        vmove_list = []
         vmove_gen = api.get_vmoves_list(
-            self.request, notification_id, filters={})
+            self.request, notification.notification_uuid, filters={})
 
         for item in vmove_gen:
             vmove_list.append(item)

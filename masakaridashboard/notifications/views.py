@@ -97,7 +97,11 @@ class DetailView(tabs.TabbedTableView):
     @memoized.memoized_method
     def get_data(self):
         try:
-            notification_id = self.kwargs['notification_id']
+            notification_data = self.kwargs['notification_id']
+            if len(notification_data.split(',')) > 1:
+                notification_id = notification_data.split(',')[0]
+            else:
+                notification_id = notification_data
             notification = api.get_notification(self.request, notification_id)
         except Exception:
             msg = _('Unable to get notification "%s".') % notification_id
