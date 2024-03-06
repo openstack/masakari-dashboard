@@ -183,6 +183,11 @@ def notification_list(request, filters=None, marker='', paginate=False):
     return entities, has_more_data, has_prev_data
 
 
+def get_notification_list(request):
+    """return notifications list """
+    return list(openstack_connection(request).notifications())
+
+
 def get_notification(request, notification_id):
     """return single notifications"""
     return openstack_connection(request).get_notification(notification_id)

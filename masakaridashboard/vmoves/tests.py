@@ -26,7 +26,7 @@ class VMoveTest(test.TestCase):
     def test_index(self):
         vmoves = self.masakari_vmove.list()
         notifications = self.masakari_notification.list()
-        with mock.patch('masakaridashboard.api.api.notification_list',
+        with mock.patch('masakaridashboard.api.api.get_notification_list',
                         return_value=notifications), mock.patch(
                 'masakaridashboard.api.api.get_notification',
                 return_value=notifications[0]), mock.patch(
