@@ -31,6 +31,12 @@ from masakaridashboard.handle_errors import handle_errors
 @memoized.memoized
 def openstack_connection(request, version=None):
     interface = getattr(settings, 'OPENSTACK_ENDPOINT_TYPE', 'publicURL')
+    region_name = request.COOKIES.get('services_region')
+    if not region_name:
+        default_service_regions = getattr(settings,
+                                          'DEFAULT_SERVICE_REGIONS',
+                                          {})
+        region_name = default_service_regions.get('*')
 
     auth = token.Token(
         auth_url=request.user.endpoint,
@@ -41,6 +47,7 @@ def openstack_connection(request, version=None):
     session = ks_session.Session(auth=auth, verify=cacert or True)
     conn = connection.Connection(session=session,
                                  interface=interface,
+                                 region_name=region_name,
                                  ha_api_version=version)
 
     return conn.instance_ha
