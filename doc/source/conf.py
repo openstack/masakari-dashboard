@@ -249,7 +249,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'Masakari dashboard Documentation',
-     'Documentation for the Masakari dashboard plugin to the Openstack\
+     'Documentation for the Masakari dashboard plugin to the OpenStack\
       Dashboard (Horizon)',
      ['OpenStack'], 1)
 ]
