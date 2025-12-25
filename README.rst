@@ -1,17 +1,16 @@
-===============================
+==================
 Masakari dashboard
-===============================
+==================
 
-Horizon plugin for masakari
+.. image:: https://governance.openstack.org/tc/badges/masakari-dashboard.svg
+
+.. Change things from this point on
+
+Horizon plugin for Masakari
 
 * Free software: Apache license
 * Source: https://opendev.org/openstack/masakari-dashboard
 * Bugs: https://bugs.launchpad.net/masakari-dashboard
-
-Features
---------
-
-* TODO
 
 Enabling in DevStack
 --------------------
@@ -19,20 +18,20 @@ Enabling in DevStack
 Add this repo as an external repository into your ``local.conf`` file::
 
     [[local|localrc]]
-    enable_plugin masakaridashboard https://github.com/openstack/masakari-dashboard
+    enable_plugin masakaridashboard https://opendev.org/openstack/masakari-dashboard
 
 Manual Installation
 -------------------
 
 Begin by cloning the Horizon and Masakari dashboard repositories::
 
-    git clone https://github.com/openstack/horizon
-    git clone https://github.com/openstack/masakari-dashboard
+    git clone https://opendev.org/openstack/horizon
+    git clone https://opendev.org/openstack/masakari-dashboard
 
 Create a virtual environment and install Horizon dependencies::
 
     cd horizon
-    python tools/install_venv.py
+    python3 tools/install_venv.py
 
 Set up your ``local_settings.py`` file::
 
